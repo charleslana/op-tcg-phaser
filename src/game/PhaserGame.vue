@@ -3,7 +3,6 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { EventBus } from './EventBus';
 import StartGame from './main';
 import Phaser from 'phaser';
-import ModelView from '../views/ModelView.vue';
 
 const scene = ref();
 const game = ref();
@@ -30,5 +29,4 @@ defineExpose({ scene, game });
 
 <template>
   <div id="game-container"></div>
-  <ModelView />
 </template>

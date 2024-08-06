@@ -1,5 +1,6 @@
 export enum SceneEnum {
   Boot = 'Boot',
   Preloader = 'Preloader',
-  MainMenu = 'MainMenu',
+  Login = 'Login',
+  Register = 'Register',
 }
