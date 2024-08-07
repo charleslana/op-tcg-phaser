@@ -6,4 +6,5 @@ export interface InputStateInterface {
   isEnteringName: boolean;
   formCursor: Phaser.GameObjects.Text;
   isHidden: boolean;
+  hiddenInput: HTMLInputElement;
 }
