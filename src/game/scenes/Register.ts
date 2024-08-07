@@ -14,6 +14,7 @@ export class Register extends Scene {
   private inputUsername: InputText = <InputText>{};
   private inputPassword: InputText = <InputText>{};
   private inputConfirmPassword: InputText = <InputText>{};
+  private error: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   init() {
     this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
@@ -26,6 +27,7 @@ export class Register extends Scene {
     this.createInputConfirmPassword();
     this.createRegisterButton();
     this.createLoginButton();
+    this.createErrorText();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -76,13 +78,19 @@ export class Register extends Scene {
     const { width, height } = this.scale;
     const button = new Button(this);
     const buttonCreate = button.create(width / 2, height / 1.5, 'Cadastrar');
-    buttonCreate.on('pointerdown', () => this.register());
+    buttonCreate.on('pointerdown', () => this.register(buttonCreate));
   }
 
-  private register(): void {
+  private register(button: Phaser.GameObjects.Image): void {
     console.log(`Username: ${this.inputUsername.text}`);
     console.log(`Password: ${this.inputPassword.text}`);
     console.log(`Confirm password: ${this.inputConfirmPassword.text}`);
+    this.error.setVisible(false);
+    button.input!.enabled = false;
+    setTimeout(() => {
+      this.error.setVisible(true);
+      button.input!.enabled = true;
+    }, 1500);
   }
 
   private createLoginButton(): void {
@@ -97,5 +105,16 @@ export class Register extends Scene {
     button.on('pointerdown', () => {
       this.scene.start(SceneEnum.Login);
     });
+  }
+
+  private createErrorText(): void {
+    const { width, height } = this.scale;
+    this.error = this.add
+      .text(width / 2, height / 1.35, 'Error desconhecido encontrado.', {
+        font: '18px Arial',
+        color: '#000000',
+      })
+      .setOrigin(0.5, 0.5);
+    this.error.setVisible(false);
   }
 }

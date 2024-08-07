@@ -13,6 +13,7 @@ export class Login extends Scene {
 
   private inputUsername: InputText = <InputText>{};
   private inputPassword: InputText = <InputText>{};
+  private error: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   init() {
     this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
@@ -24,6 +25,7 @@ export class Login extends Scene {
     this.createInputPassword();
     this.createLoginButton();
     this.createRegisterButton();
+    this.createErrorText();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -64,12 +66,18 @@ export class Login extends Scene {
     const { width, height } = this.scale;
     const button = new Button(this);
     const buttonCreate = button.create(width / 2, height / 1.8, 'Login');
-    buttonCreate.on('pointerdown', () => this.login());
+    buttonCreate.on('pointerdown', () => this.login(buttonCreate));
   }
 
-  private login(): void {
+  private login(button: Phaser.GameObjects.Image): void {
     console.log(`Username: ${this.inputUsername.text}`);
     console.log(`Password: ${this.inputPassword.text}`);
+    this.error.setVisible(false);
+    button.input!.enabled = false;
+    setTimeout(() => {
+      this.error.setVisible(true);
+      button.input!.enabled = true;
+    }, 1500);
     // this.loginAnimation();
   }
 
@@ -98,5 +106,16 @@ export class Login extends Scene {
     };
     this.cameras.main.once('camerashakecomplete', onShakeComplete);
     this.cameras.main.shake(1000, 0.003, false);
+  }
+
+  private createErrorText(): void {
+    const { width, height } = this.scale;
+    this.error = this.add
+      .text(width / 2, height / 1.6, 'Error desconhecido encontrado.', {
+        font: '18px Arial',
+        color: '#000000',
+      })
+      .setOrigin(0.5, 0.5);
+    this.error.setVisible(false);
   }
 }
