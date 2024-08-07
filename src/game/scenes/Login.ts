@@ -60,7 +60,6 @@ export class Login extends Scene {
 
   private createLoginButton(): void {
     const { width, height } = this.scale;
-
     const startGameButton = this.add.image(550, 400, ImageEnum.StoneButtonReady);
     startGameButton.setScale(1.2, 0.6).setInteractive();
     startGameButton.setPosition(width / 2, height / 1.8);
@@ -68,9 +67,7 @@ export class Login extends Scene {
     const startGameText = this.add.text(470, 387, 'Login', buttonTextConfig);
     startGameText.setOrigin(0.5, 0.5);
     startGameText.setPosition(startGameButton.x, startGameButton.y);
-
     startGameButton.on('pointerdown', () => this.startGame());
-
     this.animateButton(startGameButton);
   }
 
