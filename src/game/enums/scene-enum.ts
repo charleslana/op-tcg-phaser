@@ -3,4 +3,5 @@ export enum SceneEnum {
   Preloader = 'Preloader',
   Login = 'Login',
   Register = 'Register',
+  Home = 'Home',
 }

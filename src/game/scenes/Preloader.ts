@@ -19,13 +19,14 @@ export class Preloader extends Scene {
     this.load.image(ImageEnum.StoneButtonFrame, 'stone-button-frame.png');
     this.load.image(ImageEnum.StoneButtonHovered, 'stone-button-in-set-hovered.png');
     this.load.image(ImageEnum.StoneButtonReady, 'stone-button-in-set-ready.png');
+    this.load.image(ImageEnum.ButtonBeige, 'button-beige.png');
     // for (let index = 0; index < 50; index++) {
     //   this.load.image(index.toString(), 'deck-background.jpg');
     // }
   }
 
   create() {
-    this.scene.start(SceneEnum.Login);
+    this.scene.start(SceneEnum.Home);
   }
 
   private createBg(): void {

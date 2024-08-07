@@ -42,7 +42,8 @@ export class Register extends Scene {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 5, 'Faça o cadastro da sua conta', {
-        font: '25px Arial',
+        fontFamily: 'LiberationSans',
+        fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);
@@ -97,7 +98,8 @@ export class Register extends Scene {
     const { width, height } = this.scale;
     const button = this.add
       .text(width / 2, height / 1.2, 'Fazer login', {
-        font: '25px Arial',
+        fontFamily: 'LiberationSans',
+        fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5)
@@ -110,8 +112,9 @@ export class Register extends Scene {
   private createErrorText(): void {
     const { width, height } = this.scale;
     this.error = this.add
-      .text(width / 2, height / 1.35, 'Error desconhecido encontrado.', {
-        font: '18px Arial',
+      .text(width / 2, height / 1.35, 'Erro desconhecido encontrado.', {
+        fontFamily: 'LiberationSans',
+        fontSize: '18px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);

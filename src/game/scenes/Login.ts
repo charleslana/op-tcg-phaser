@@ -39,7 +39,8 @@ export class Login extends Scene {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 5, 'Faça login para entrar', {
-        font: '25px Arial',
+        fontFamily: 'LiberationSans',
+        fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);
@@ -72,12 +73,13 @@ export class Login extends Scene {
   private login(button: Phaser.GameObjects.Image): void {
     console.log(`Username: ${this.inputUsername.text}`);
     console.log(`Password: ${this.inputPassword.text}`);
-    this.error.setVisible(false);
-    button.input!.enabled = false;
-    setTimeout(() => {
-      this.error.setVisible(true);
-      button.input!.enabled = true;
-    }, 1500);
+    this.scene.start(SceneEnum.Home);
+    // this.error.setVisible(false);
+    // button.input!.enabled = false;
+    // setTimeout(() => {
+    //   this.error.setVisible(true);
+    //   button.input!.enabled = true;
+    // }, 1500);
     // this.loginAnimation();
   }
 
@@ -85,7 +87,8 @@ export class Login extends Scene {
     const { width, height } = this.scale;
     const button = this.add
       .text(width / 2, height / 1.2, 'Fazer cadastro', {
-        font: '25px Arial',
+        fontFamily: 'LiberationSans',
+        fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5)
@@ -111,8 +114,9 @@ export class Login extends Scene {
   private createErrorText(): void {
     const { width, height } = this.scale;
     this.error = this.add
-      .text(width / 2, height / 1.6, 'Error desconhecido encontrado.', {
-        font: '18px Arial',
+      .text(width / 2, height / 1.6, 'Erro desconhecido encontrado.', {
+        fontFamily: 'LiberationSans',
+        fontSize: '18px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);

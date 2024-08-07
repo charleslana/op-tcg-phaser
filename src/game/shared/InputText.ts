@@ -48,7 +48,7 @@ export class InputText extends Phaser.GameObjects.Container {
   }
 
   private createNameText(): void {
-    const nameTextConfig = { fontSize: '23px', fill: '#000000' };
+    const nameTextConfig = { fontFamily: 'LiberationSans', fontSize: '23px', fill: '#000000' };
     this.inputState.name = this.placeholder;
     this.inputState.nameText = this.scene.add
       .text(420, 315, this.inputState.name, nameTextConfig)
@@ -67,7 +67,7 @@ export class InputText extends Phaser.GameObjects.Container {
   }
 
   private createCursor(): void {
-    const cursorConfig = { fontSize: '32px', fill: '#000000' };
+    const cursorConfig = { fontFamily: 'LiberationSans', fontSize: '32px', fill: '#000000' };
     this.inputState.formCursor = this.scene.add.text(420, 310, '|', cursorConfig);
     this.inputState.formCursor.setDepth(21).setAlpha(0);
   }

@@ -1,5 +1,6 @@
 import { AUTO, Game } from 'phaser';
 import { Boot } from './scenes/Boot';
+import { Home } from './scenes/Home';
 import { Login } from './scenes/Login';
 import { Preloader } from './scenes/Preloader';
 import { Register } from './scenes/Register';
@@ -24,7 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   parent: 'game-container',
   backgroundColor: '#ffffff',
-  scene: [Boot, Preloader, Login, Register],
+  scene: [Boot, Preloader, Login, Register, Home],
 };
 
 const StartGame = (parent: string) => {
