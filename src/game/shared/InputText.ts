@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
-import { InputStateInterface } from '../interfaces/input-state-interface';
 import { ImageEnum } from '../enums/image-enum';
+import { InputStateInterface } from '../interfaces/input-state-interface';
 
 export class InputText extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -16,7 +16,7 @@ export class InputText extends Phaser.GameObjects.Container {
   private cursorTween: Phaser.Tweens.Tween = {} as Phaser.Tweens.Tween;
   private frame: Phaser.GameObjects.Image = {} as Phaser.GameObjects.Image;
 
-  create(): void {
+  public create(): void {
     this.initializeKeyboard();
     this.createNameText();
     this.createInputGraphics();
@@ -27,7 +27,7 @@ export class InputText extends Phaser.GameObjects.Container {
     this.createInputMobile();
   }
 
-  update(): void {
+  public update(): void {
     this.updateCursorPosition();
   }
 
@@ -63,7 +63,7 @@ export class InputText extends Phaser.GameObjects.Container {
       new Phaser.Geom.Rectangle(0, 0, 300, 65),
       Phaser.Geom.Rectangle.Contains
     );
-    this.activateGraphics(this.inputGraphics);
+    this.activateCursor(this.inputGraphics);
   }
 
   private createCursor(): void {
@@ -75,7 +75,7 @@ export class InputText extends Phaser.GameObjects.Container {
   private createFrame(): void {
     this.frame = this.scene.add.image(550, 325, ImageEnum.StoneButtonFrame);
     this.frame.setScale(1.2, 0.6).setInteractive().setDepth(22);
-    this.activateGraphics(this.frame);
+    this.activateCursor(this.frame);
   }
 
   private createCursorTween(): void {
@@ -102,7 +102,7 @@ export class InputText extends Phaser.GameObjects.Container {
     const maxNameLength = 16;
     if (event.key === 'Backspace' && this.inputState.name.length > 0) {
       this.inputState.name = this.inputState.name.slice(0, -1);
-      this.text = this.inputState.name;
+      this.text = this.text.slice(0, -1);
     } else if (
       event.key.length === 1 &&
       event.key.match(/[a-zA-Z0-9\s\-_]/) &&
@@ -118,9 +118,7 @@ export class InputText extends Phaser.GameObjects.Container {
   private updateCursorPosition(): void {
     let textWidth = 0;
     if (this.inputState.isEnteringName) {
-      this.inputState.nameText.setText(
-        this.inputState.isHidden ? '•'.repeat(this.inputState.name.length) : this.inputState.name
-      );
+      this.inputState.nameText.setText(this.inputState.name);
       textWidth = this.inputState.nameText.width;
       this.inputState.formCursor.x = this.inputState.nameText.x + textWidth - 7;
     }
@@ -141,9 +139,7 @@ export class InputText extends Phaser.GameObjects.Container {
     );
   }
 
-  private activateGraphics(
-    gameObject: Phaser.GameObjects.Graphics | Phaser.GameObjects.Image
-  ): void {
+  private activateCursor(gameObject: Phaser.GameObjects.Graphics | Phaser.GameObjects.Image): void {
     gameObject.on('pointerup', () => {
       if (!this.inputState.isEnteringName) {
         this.inputState.isEnteringName = true;
@@ -156,13 +152,13 @@ export class InputText extends Phaser.GameObjects.Container {
           this.inputState.hiddenInput.focus();
         }
         this.scene.time.delayedCall(200, () => {
-          this.deactivateGraphics();
+          this.deactivateCursor();
         });
       }
     });
   }
 
-  private deactivateGraphics(): void {
+  private deactivateCursor(): void {
     this.scene.input.off('pointerup');
     this.scene.input.once('pointerup', () => {
       if (this.inputState.isEnteringName) {
