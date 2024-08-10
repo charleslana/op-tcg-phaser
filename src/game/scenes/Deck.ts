@@ -13,6 +13,8 @@ export class Deck extends Scene {
   }
 
   private inputName: InputText = <InputText>{};
+  private dropDownList: SimpleDropDownList = <SimpleDropDownList>{};
+  private deckSelected = 0;
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.DeckBackground).setOrigin(0);
@@ -21,9 +23,11 @@ export class Deck extends Scene {
 
   create() {
     this.createDecksDropdown();
+    this.createLoadDeckButton();
     this.createInputName();
     this.createSaveDeckButton();
     this.createBackButton();
+    this.createClearDeckButton();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -35,7 +39,7 @@ export class Deck extends Scene {
   private createDecksDropdown(): void {
     const style: SimpleDropDownList.IConfig = {
       label: {
-        space: { left: 0, right: 0, top: 15, bottom: 15 },
+        space: { left: 0, right: 0, top: 20, bottom: 20 },
         background: {
           color: 0xfffffff,
         },
@@ -49,7 +53,7 @@ export class Deck extends Scene {
         height: 20,
       },
       button: {
-        space: { left: 10, right: 10, top: 15, bottom: 15 },
+        space: { left: 10, right: 10, top: 20, bottom: 20 },
         background: {
           color: 0xffffff,
           strokeWidth: 0,
@@ -117,24 +121,38 @@ export class Deck extends Scene {
       { text: 'Deck AW', value: 49 },
       { text: 'Deck AX', value: 50 },
     ];
-    const dropDownList = this.rexUI.add
+    this.dropDownList = this.rexUI.add
       .simpleDropDownList(style)
-      .resetDisplayContent('Selecione um deck')
+      .resetDisplayContent('  Selecione um deck')
       .setOptions(options)
       .setPosition(200, 200)
       .layout();
     const print = this.add.text(0, 0, '');
-    dropDownList.on(
+    const self = this;
+    this.dropDownList.on(
       'button.click',
       function (
         dropDownList: SimpleDropDownList,
         _listPanel: SimpleDropDownList,
         button: SimpleDropDownList
       ) {
-        dropDownList.setText(button.text);
+        dropDownList.setText('  ' + button.text);
         print.text += `Click ${button.text}, value = ${button.value}\n`;
+        self.deckSelected = button.value;
       }
     );
+  }
+
+  private createLoadDeckButton(): void {
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: 200 + 270,
+      positionY: 200,
+      text: 'Carregar',
+      scaleX: 1,
+      scaleY: 1.5,
+    });
+    buttonCreate.on('pointerdown', () => console.log(this.deckSelected));
   }
 
   private createInputName(): void {
@@ -160,12 +178,30 @@ export class Deck extends Scene {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
-      positionX: 200,
+      positionX: 120,
       positionY: height / 1.2,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
     buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Home));
+  }
+
+  private createClearDeckButton(): void {
+    const { height } = this.scale;
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: 200 + 220,
+      positionY: height / 1.2,
+      text: 'Limpar deck',
+      scaleX: 1.4,
+      scaleY: 1.5,
+    });
+    buttonCreate.on('pointerdown', () => this.clearDeck());
+  }
+
+  private clearDeck(): void {
+    this.dropDownList.setText('  Selecione um deck');
+    this.deckSelected = 0;
   }
 }
