@@ -26,12 +26,12 @@ export class Preloader extends Scene {
   }
 
   create() {
-    this.scene.start(SceneEnum.Home);
+    this.scene.start(SceneEnum.Deck);
   }
 
   private createBg(): void {
-    const bootBg = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
-    bootBg.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+    const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
+    backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
   }
 
   private createLoadingText(): void {

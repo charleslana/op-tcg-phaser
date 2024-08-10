@@ -25,6 +25,12 @@ export class InputText extends Phaser.GameObjects.Container {
     this.createCursorTween();
     this.setupInputEvents();
     this.createInputMobile();
+    this.add([
+      this.inputGraphics,
+      this.inputState.nameText,
+      this.inputState.formCursor,
+      this.frame,
+    ]);
   }
 
   public update(): void {

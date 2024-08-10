@@ -6,6 +6,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
+    "check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "dev": "vite --config vite/config.dev.mjs",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "phaser": "^3.80.1",
+    "phaser3-rex-plugins": "^1.80.6",
     "vue": "^3.4.27"
   },
   "devDependencies": {

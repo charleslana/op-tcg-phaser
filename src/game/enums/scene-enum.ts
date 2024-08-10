@@ -4,4 +4,5 @@ export enum SceneEnum {
   Login = 'Login',
   Register = 'Register',
   Home = 'Home',
+  Deck = 'Deck',
 }

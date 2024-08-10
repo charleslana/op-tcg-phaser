@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-    'no-console': '0',
+    'no-console': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
   },
 };

@@ -17,7 +17,8 @@ export class Register extends Scene {
   private error: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   init() {
-    this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
+    const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
+    backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
   }
 
   create() {
