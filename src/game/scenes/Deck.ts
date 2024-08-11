@@ -15,6 +15,8 @@ export class Deck extends Scene {
   private inputName: InputText = <InputText>{};
   private dropDownList: SimpleDropDownList = <SimpleDropDownList>{};
   private deckSelected = 0;
+  private redFilter = false;
+  private blueFilter = false;
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.DeckBackground).setOrigin(0);
@@ -29,6 +31,7 @@ export class Deck extends Scene {
     this.createBackButton();
     this.createClearDeckButton();
     this.createDeckInPanel();
+    this.createDeckFilter();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -208,8 +211,59 @@ export class Deck extends Scene {
 
   private createDeckInPanel(): void {
     const panel = this.add.image(400, 400, ImageEnum.PanelBeige);
-    panel.setPosition(1230, 273);
+    panel.setOrigin(0, 0.5);
+    panel.setPosition(630, 273);
     panel.setAlpha(0.4);
     panel.setScale(12, 4.2);
+  }
+
+  private createDeckFilter(): void {
+    const redFilter = this.createCheckbox(
+      650,
+      520,
+      'Vermelho',
+      (value: boolean) => (this.redFilter = value)
+    );
+    this.createCheckbox(
+      650 + redFilter,
+      520,
+      'Azul',
+      (value: boolean) => (this.blueFilter = value)
+    );
+  }
+
+  private createCheckbox(
+    positionX: number,
+    positionY: number,
+    text: string,
+    onChange: (value: boolean) => void,
+    readOnly?: boolean
+  ): number {
+    const checkbox = this.rexUI.add.checkbox(positionX, positionY, 40, 40, 0xffffff);
+    checkbox.setBoxFillStyle(0xffffff, 1);
+    checkbox.setCheckerStyle(0x000000, 1);
+    checkbox.setUncheckedBoxFillStyle(0xffffff, 1);
+    checkbox.setBoxStrokeStyle(0, 0x000000, 1);
+    checkbox.setValue(false);
+    if (readOnly) {
+      checkbox.setReadOnly(true);
+    }
+    checkbox.on('valuechange', function (value: boolean) {
+      onChange(value);
+      console.log(`${text} filter: ${value}`);
+    });
+    const labelText = this.add
+      .text(positionX + 30, positionY, text, {
+        fontSize: '30px',
+        color: '#000000',
+        fontFamily: 'LiberationSans',
+      })
+      .setOrigin(0, 0.5);
+    labelText.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
+      if (!readOnly) {
+        checkbox.setValue(!checkbox.checked);
+      }
+    });
+    return checkbox.width + labelText.width + 30;
   }
 }
