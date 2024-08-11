@@ -1,4 +1,4 @@
-import { Button } from '../shared/Button';
+import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
@@ -78,8 +78,14 @@ export class Register extends Scene {
 
   private createRegisterButton(): void {
     const { width, height } = this.scale;
-    const button = new Button(this);
-    const buttonCreate = button.create(width / 2, height / 1.5, 'Cadastrar');
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: width / 2,
+      positionY: height / 1.5,
+      text: 'Cadastrar',
+      scaleX: 1.3,
+      scaleY: 1.5,
+    });
     buttonCreate.on('pointerdown', () => this.register(buttonCreate));
   }
 

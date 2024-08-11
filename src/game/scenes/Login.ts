@@ -1,9 +1,10 @@
-import { Button } from '../shared/Button';
+import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
+import { useUserStore } from '@/stores/user-store';
 import { Version } from '../shared/Version';
 
 export class Login extends Scene {
@@ -18,6 +19,8 @@ export class Login extends Scene {
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
     backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+    const userStore = useUserStore();
+    userStore.setUserId(1);
   }
 
   create() {
@@ -66,8 +69,14 @@ export class Login extends Scene {
 
   private createLoginButton(): void {
     const { width, height } = this.scale;
-    const button = new Button(this);
-    const buttonCreate = button.create(width / 2, height / 1.8, 'Login');
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: width / 2,
+      positionY: height / 1.8,
+      text: 'Entrar',
+      scaleX: 0.9,
+      scaleY: 1.5,
+    });
     buttonCreate.on('pointerdown', () => this.login(buttonCreate));
   }
 

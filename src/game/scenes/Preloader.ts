@@ -9,6 +9,7 @@ export class Preloader extends Scene {
 
   init() {
     this.createBg();
+    this.createTitleText();
     this.createLoadingText();
     this.createProgressBar();
   }
@@ -35,11 +36,23 @@ export class Preloader extends Scene {
     backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
   }
 
+  private createTitleText(): void {
+    const { width, height } = this.scale;
+    this.add
+      .text(width / 2, height / 4, 'ONE PIECE TCG(Trading Card Game)\nSimulador', {
+        fontFamily: 'LiberationSans',
+        fontSize: '48px',
+        color: '#000000',
+        fontStyle: 'bold',
+      })
+      .setOrigin(0.5);
+  }
+
   private createLoadingText(): void {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 2 + 130, 'Carregando...', {
-        fontFamily: 'Arial',
+        fontFamily: 'LiberationSans',
         fontSize: '24px',
         color: '#000000',
       })

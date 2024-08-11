@@ -6,6 +6,7 @@ import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
+import { useUserStore } from '@/stores/user-store';
 import { Version } from '../shared/Version';
 
 export class Deck extends Scene {
@@ -18,10 +19,17 @@ export class Deck extends Scene {
   private deckSelected: DeckInterface = <DeckInterface>{ id: 0 };
   private redFilter = false;
   private blueFilter = false;
+  private blackFilter = false;
+  private greenFilter = false;
+  private purpleFilter = false;
+  private yellowFilter = false;
+  private searchTerm: InputText = <InputText>{};
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.DeckBackground).setOrigin(0);
     backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+    const userStore = useUserStore();
+    console.log(userStore.userId, 'user-store');
   }
 
   create() {
@@ -29,16 +37,19 @@ export class Deck extends Scene {
     this.createLoadDeckButton();
     this.createInputName();
     this.createSaveDeckButton();
+    this.createInfo();
     this.createBackButton();
     this.createClearDeckButton();
     this.createDeckInPanel();
     this.createDeckFilter();
+    this.createDeckOutPanel();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
 
   update() {
     this.inputName.update();
+    this.searchTerm.update();
   }
 
   private createDecksDropdown(): void {
@@ -87,7 +98,7 @@ export class Deck extends Scene {
   private getDropdownOptions(): { text: string; value: number }[] {
     const options = [
       { text: 'Deck A', value: 1 },
-      { text: 'Deck B', value: 2 },
+      { text: 'Deck B Colocar limite de cha', value: 2 },
       { text: 'Deck C', value: 3 },
       { text: 'Deck D', value: 4 },
       { text: 'Deck E', value: 5 },
@@ -170,8 +181,10 @@ export class Deck extends Scene {
 
   private changeInputName(): void {
     console.log(this.deckSelected);
-    this.inputName.text = this.deckSelected.name;
-    this.inputName.updateName(this.deckSelected.name);
+    if (this.deckSelected.id !== 0) {
+      this.inputName.text = this.deckSelected.name;
+      this.inputName.updateName(this.deckSelected.name);
+    }
   }
 
   private createInputName(): void {
@@ -190,7 +203,49 @@ export class Deck extends Scene {
       scaleX: 0.8,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => null);
+    buttonCreate.on('pointerdown', () => this.showToast('O deck foi salvo com sucesso.'));
+  }
+
+  private showToast(message: string): void {
+    this.rexUI.add
+      .toast({
+        x: 400,
+        y: 300,
+        background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x4e342e),
+        text: this.add.text(0, 0, '', {
+          fontSize: '24px',
+          fontFamily: 'LiberationSans',
+        }),
+        space: {
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 20,
+        },
+      })
+      .showMessage(message);
+  }
+
+  private createInfo(): void {
+    const wrappedText = this.add.text(
+      300,
+      300,
+      `Digite Nomes de cartas, Número de Custo, Tipos de Ataque ou Nomes de Categoria sem espaços na barra de Pesquisa para restringir os resultados.
+      Colocar colchetes [] em volta de um termo de pesquisa pesquisará por essa palavra exata.
+      Outras opções de pesquisa são atualmente: OnKO, Trigger, Activate, EndOfTurn, Blocker, Rush, Counter, OnBlock, OnAttack
+      Pesquisar P7000 retornará cartas com 7000 de Poder, e pesquisar C2000 retornará cartas com 2000 de Contador
+      Adicionar "<" + número do conjunto pesquisará cartas até um certo conjunto. ou seja, <3.5 pesquisará até ST-08 Luffy e ST-09 Yamato.
+      `,
+      {
+        fontSize: '20px',
+        fontFamily: 'LiberationSans',
+        color: '#000000',
+        wordWrap: { width: 500 },
+        align: 'left',
+        lineSpacing: 10,
+      }
+    );
+    wrappedText.setOrigin(0.5, 0);
   }
 
   private createBackButton(): void {
@@ -235,13 +290,23 @@ export class Deck extends Scene {
   }
 
   private createDeckFilter(): void {
-    const redFilter = this.createCheckbox(
-      650,
-      520,
-      'Vermelho',
-      (value: boolean) => (this.redFilter = value)
-    );
-    this.createCheckbox(
+    const redFilter = this.createRedFilter();
+    const blueFilter = this.createBlueFilter(redFilter);
+    this.createBlackFilter(redFilter, blueFilter);
+    this.createGreenFilter();
+    this.createPurpleFilter(redFilter);
+    const yellowFilter = this.createYellowFilter(redFilter, blueFilter);
+    const limitCard = this.createLimitCardFilter(redFilter, blueFilter, yellowFilter);
+    this.createSearchTermInput(redFilter, blueFilter, yellowFilter, limitCard);
+    this.createCardCountText(redFilter, blueFilter, yellowFilter, limitCard);
+  }
+
+  private createRedFilter(): number {
+    return this.createCheckbox(650, 520, 'Vermelho', (value: boolean) => (this.redFilter = value));
+  }
+
+  private createBlueFilter(redFilter: number): number {
+    return this.createCheckbox(
       650 + redFilter,
       520,
       'Azul',
@@ -249,19 +314,97 @@ export class Deck extends Scene {
     );
   }
 
+  private createBlackFilter(redFilter: number, blueFilter: number): void {
+    this.createCheckbox(
+      650 + redFilter + blueFilter,
+      520,
+      'Preto',
+      (value: boolean) => (this.blueFilter = value)
+    );
+  }
+
+  private createGreenFilter(): void {
+    this.createCheckbox(650, 520 + 60, 'Verde', (value: boolean) => (this.greenFilter = value));
+  }
+
+  private createPurpleFilter(redFilter: number): void {
+    this.createCheckbox(
+      650 + redFilter,
+      520 + 60,
+      'Roxo',
+      (value: boolean) => (this.purpleFilter = value)
+    );
+  }
+
+  private createYellowFilter(redFilter: number, blueFilter: number): number {
+    return this.createCheckbox(
+      650 + redFilter + blueFilter,
+      520 + 60,
+      'Amarelo',
+      (value: boolean) => (this.yellowFilter = value)
+    );
+  }
+
+  private createLimitCardFilter(
+    redFilter: number,
+    blueFilter: number,
+    yellowFilter: number
+  ): number {
+    return this.createCheckbox(
+      650 + redFilter + blueFilter + yellowFilter,
+      520 + 30,
+      'Limite de 4',
+      () => null,
+      true,
+      true
+    );
+  }
+
+  private createSearchTermInput(
+    redFilter: number,
+    blueFilter: number,
+    yellowFilter: number,
+    limitCard: number
+  ): void {
+    this.searchTerm = new InputText(this);
+    this.searchTerm.placeholder = 'Pesquisar';
+    this.searchTerm.create();
+    this.searchTerm.changePosition(
+      650 + redFilter + blueFilter + yellowFilter + limitCard + 100,
+      520 + 30
+    );
+  }
+
+  private createCardCountText(
+    redFilter: number,
+    blueFilter: number,
+    yellowFilter: number,
+    limitCard: number
+  ): void {
+    const text = this.add
+      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '51 / 51', {
+        fontSize: '30px',
+        color: '#000000',
+        fontFamily: 'LiberationSans',
+      })
+      .setOrigin(0, 0.5);
+    text.setLetterSpacing(0);
+  }
+
   private createCheckbox(
     positionX: number,
     positionY: number,
     text: string,
     onChange: (value: boolean) => void,
-    readOnly?: boolean
+    readOnly?: boolean,
+    checked?: boolean
   ): number {
     const checkbox = this.rexUI.add.checkbox(positionX, positionY, 40, 40, 0xffffff);
     checkbox.setBoxFillStyle(0xffffff, 1);
     checkbox.setCheckerStyle(0x000000, 1);
     checkbox.setUncheckedBoxFillStyle(0xffffff, 1);
     checkbox.setBoxStrokeStyle(0, 0x000000, 1);
-    checkbox.setValue(false);
+    checkbox.setValue(checked ?? false);
     if (readOnly) {
       checkbox.setReadOnly(true);
     }
@@ -271,16 +414,24 @@ export class Deck extends Scene {
     });
     const labelText = this.add
       .text(positionX, positionY, `    ${text}`, {
-        fontSize: '30px',
+        fontSize: '25px',
         color: '#000000',
         fontFamily: 'LiberationSans',
       })
       .setOrigin(0, 0.5);
-    labelText.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
-      if (!readOnly) {
+    if (!readOnly) {
+      labelText.setInteractive({ useHandCursor: false }).on('pointerdown', () => {
         checkbox.setValue(!checkbox.checked);
-      }
-    });
+      });
+    }
     return checkbox.width + labelText.width + 30;
+  }
+
+  private createDeckOutPanel(): void {
+    const panel = this.add.image(400, 400, ImageEnum.PanelBeige);
+    panel.setOrigin(0, 0.5);
+    panel.setPosition(630, 840);
+    panel.setAlpha(0.4);
+    panel.setScale(12, 4.2);
   }
 }
