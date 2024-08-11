@@ -11,26 +11,19 @@ export class InputText extends Phaser.GameObjects.Container {
   public placeholder = 'Enter your name...';
   public text = '';
 
-  private inputGraphics: Phaser.GameObjects.Graphics = {} as Phaser.GameObjects.Graphics;
+  private frame: Phaser.GameObjects.Image = {} as Phaser.GameObjects.Image;
   private inputState: InputStateInterface = {} as InputStateInterface;
   private cursorTween: Phaser.Tweens.Tween = {} as Phaser.Tweens.Tween;
-  private frame: Phaser.GameObjects.Image = {} as Phaser.GameObjects.Image;
 
   public create(): void {
     this.initializeKeyboard();
     this.createNameText();
-    this.createInputGraphics();
-    this.createCursor();
     this.createFrame();
+    this.createCursor();
     this.createCursorTween();
     this.setupInputEvents();
     this.createInputMobile();
-    this.add([
-      this.inputGraphics,
-      this.inputState.nameText,
-      this.inputState.formCursor,
-      this.frame,
-    ]);
+    this.add([this.frame, this.inputState.nameText, this.inputState.formCursor]);
   }
 
   public update(): void {
@@ -49,6 +42,10 @@ export class InputText extends Phaser.GameObjects.Container {
     this.updateNameText();
   }
 
+  public updateName(nameText: string): void {
+    this.inputState.nameText.setText(nameText);
+  }
+
   private initializeKeyboard(): void {
     this.scene.input.keyboard?.createCursorKeys();
   }
@@ -61,27 +58,16 @@ export class InputText extends Phaser.GameObjects.Container {
       .setDepth(21);
   }
 
-  private createInputGraphics(): void {
-    this.inputGraphics = this.scene.add.graphics({ x: 400, y: 290 });
-    this.inputGraphics.fillStyle(0xffffff, 1).setAlpha(0.9).setDepth(20);
-    this.inputGraphics.fillRect(0, 0, 300, 65);
-    this.inputGraphics.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, 300, 65),
-      Phaser.Geom.Rectangle.Contains
-    );
-    this.activateCursor(this.inputGraphics);
+  private createFrame(): void {
+    this.frame = this.scene.add.image(550, 325, ImageEnum.PanelBeige);
+    this.frame.setScale(3, 0.7).setInteractive().setDepth(22);
+    this.activateCursor(this.frame);
   }
 
   private createCursor(): void {
     const cursorConfig = { fontFamily: 'LiberationSans', fontSize: '32px', fill: '#000000' };
     this.inputState.formCursor = this.scene.add.text(420, 310, '|', cursorConfig);
     this.inputState.formCursor.setDepth(21).setAlpha(0);
-  }
-
-  private createFrame(): void {
-    this.frame = this.scene.add.image(550, 325, ImageEnum.StoneButtonFrame);
-    this.frame.setScale(1.2, 0.6).setInteractive().setDepth(22);
-    this.activateCursor(this.frame);
   }
 
   private createCursorTween(): void {
@@ -134,7 +120,6 @@ export class InputText extends Phaser.GameObjects.Container {
     const graphicsWidth = 300;
     const graphicsHeight = 65;
     this.frame.setPosition(x - graphicsWidth / 2 + 150, y - graphicsHeight / 2 + 35);
-    this.inputGraphics.setPosition(x - graphicsWidth / 2, y - graphicsHeight / 2);
     this.inputState.nameText.setPosition(x - graphicsWidth / 2 + 20, y - graphicsHeight / 2 + 25);
     this.inputState.formCursor.setPosition(x - graphicsWidth / 2 + 20, y - graphicsHeight / 2 + 15);
   }
@@ -145,7 +130,7 @@ export class InputText extends Phaser.GameObjects.Container {
     );
   }
 
-  private activateCursor(gameObject: Phaser.GameObjects.Graphics | Phaser.GameObjects.Image): void {
+  private activateCursor(gameObject: Phaser.GameObjects.Image): void {
     gameObject.on('pointerup', () => {
       if (!this.inputState.isEnteringName) {
         this.inputState.isEnteringName = true;

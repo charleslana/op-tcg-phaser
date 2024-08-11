@@ -1,5 +1,6 @@
 import SimpleDropDownList from 'phaser3-rex-plugins/templates/ui/simpledropdownlist/SimpleDropDownList';
 import { ButtonBeige } from '../shared/ButtonBeige';
+import { DeckInterface } from '../interfaces/deck-interface';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
@@ -14,7 +15,7 @@ export class Deck extends Scene {
 
   private inputName: InputText = <InputText>{};
   private dropDownList: SimpleDropDownList = <SimpleDropDownList>{};
-  private deckSelected = 0;
+  private deckSelected: DeckInterface = <DeckInterface>{ id: 0 };
   private redFilter = false;
   private blueFilter = false;
 
@@ -41,16 +42,25 @@ export class Deck extends Scene {
   }
 
   private createDecksDropdown(): void {
-    const style: SimpleDropDownList.IConfig = {
+    const style = this.getDropdownStyle();
+    const options = this.getDropdownOptions();
+    this.dropDownList = this.rexUI.add
+      .simpleDropDownList(style)
+      .resetDisplayContent('  Selecione um deck')
+      .setOptions(options)
+      .setPosition(200, 100)
+      .layout();
+    this.setupDropdownEvents();
+  }
+
+  private getDropdownStyle(): SimpleDropDownList.IConfig {
+    return {
       label: {
         space: { left: 0, right: 0, top: 20, bottom: 20 },
-        background: {
-          color: 0xfffffff,
-        },
+        background: { color: 0xfffffff },
         text: {
           fontSize: 23,
           fixedWidth: 300,
-          // fixedHeight: 40,
           fontFamily: 'LiberationSans',
           color: 0xf000000,
         },
@@ -67,12 +77,14 @@ export class Deck extends Scene {
         text: {
           fontSize: 23,
           fixedWidth: 280,
-          // fixedHeight: 40,
           fontFamily: 'LiberationSans',
           color: 0xfffffff,
         },
       },
     };
+  }
+
+  private getDropdownOptions(): { text: string; value: number }[] {
     const options = [
       { text: 'Deck A', value: 1 },
       { text: 'Deck B', value: 2 },
@@ -125,13 +137,10 @@ export class Deck extends Scene {
       { text: 'Deck AW', value: 49 },
       { text: 'Deck AX', value: 50 },
     ];
-    this.dropDownList = this.rexUI.add
-      .simpleDropDownList(style)
-      .resetDisplayContent('  Selecione um deck')
-      .setOptions(options)
-      .setPosition(200, 100)
-      .layout();
-    const print = this.add.text(0, 0, '');
+    return options;
+  }
+
+  private setupDropdownEvents(): void {
     const self = this;
     this.dropDownList.on(
       'button.click',
@@ -141,8 +150,8 @@ export class Deck extends Scene {
         button: SimpleDropDownList
       ) {
         dropDownList.setText('  ' + button.text);
-        print.text += `Click ${button.text}, value = ${button.value}\n`;
-        self.deckSelected = button.value;
+        self.deckSelected.id = button.value;
+        self.deckSelected.name = button.text;
       }
     );
   }
@@ -156,7 +165,13 @@ export class Deck extends Scene {
       scaleX: 1,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => console.log(this.deckSelected));
+    buttonCreate.on('pointerdown', () => this.changeInputName());
+  }
+
+  private changeInputName(): void {
+    console.log(this.deckSelected);
+    this.inputName.text = this.deckSelected.name;
+    this.inputName.updateName(this.deckSelected.name);
   }
 
   private createInputName(): void {
@@ -206,7 +221,9 @@ export class Deck extends Scene {
 
   private clearDeck(): void {
     this.dropDownList.setText('  Selecione um deck');
-    this.deckSelected = 0;
+    this.deckSelected.id = 0;
+    this.inputName.text = '';
+    this.inputName.updateName(this.inputName.placeholder);
   }
 
   private createDeckInPanel(): void {
@@ -253,7 +270,7 @@ export class Deck extends Scene {
       console.log(`${text} filter: ${value}`);
     });
     const labelText = this.add
-      .text(positionX + 30, positionY, text, {
+      .text(positionX, positionY, `    ${text}`, {
         fontSize: '30px',
         color: '#000000',
         fontFamily: 'LiberationSans',
