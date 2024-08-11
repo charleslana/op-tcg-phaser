@@ -20,6 +20,7 @@ export class Preloader extends Scene {
     this.load.image(ImageEnum.StoneButtonHovered, 'stone-button-in-set-hovered.png');
     this.load.image(ImageEnum.StoneButtonReady, 'stone-button-in-set-ready.png');
     this.load.image(ImageEnum.ButtonBeige, 'button-beige.png');
+    this.load.image(ImageEnum.PanelBeige, 'panel-beige.png');
     // for (let index = 0; index < 50; index++) {
     //   this.load.image(index.toString(), 'deck-background.jpg');
     // }

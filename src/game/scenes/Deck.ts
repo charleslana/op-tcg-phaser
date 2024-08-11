@@ -28,6 +28,7 @@ export class Deck extends Scene {
     this.createSaveDeckButton();
     this.createBackButton();
     this.createClearDeckButton();
+    this.createDeckInPanel();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -125,7 +126,7 @@ export class Deck extends Scene {
       .simpleDropDownList(style)
       .resetDisplayContent('  Selecione um deck')
       .setOptions(options)
-      .setPosition(200, 200)
+      .setPosition(200, 100)
       .layout();
     const print = this.add.text(0, 0, '');
     const self = this;
@@ -147,7 +148,7 @@ export class Deck extends Scene {
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: 200 + 270,
-      positionY: 200,
+      positionY: 100,
       text: 'Carregar',
       scaleX: 1,
       scaleY: 1.5,
@@ -159,14 +160,14 @@ export class Deck extends Scene {
     this.inputName = new InputText(this);
     this.inputName.placeholder = 'Digite o nome do deck';
     this.inputName.create();
-    this.inputName.changePosition(200, 300);
+    this.inputName.changePosition(200, 200);
   }
 
   private createSaveDeckButton(): void {
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: 200 + 250,
-      positionY: 300,
+      positionY: 200,
       text: 'Salvar',
       scaleX: 0.8,
       scaleY: 1.5,
@@ -179,7 +180,7 @@ export class Deck extends Scene {
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: 120,
-      positionY: height / 1.2,
+      positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
@@ -192,7 +193,7 @@ export class Deck extends Scene {
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: 200 + 220,
-      positionY: height / 1.2,
+      positionY: height / 1.1,
       text: 'Limpar deck',
       scaleX: 1.4,
       scaleY: 1.5,
@@ -203,5 +204,12 @@ export class Deck extends Scene {
   private clearDeck(): void {
     this.dropDownList.setText('  Selecione um deck');
     this.deckSelected = 0;
+  }
+
+  private createDeckInPanel(): void {
+    const panel = this.add.image(400, 400, ImageEnum.PanelBeige);
+    panel.setPosition(1230, 273);
+    panel.setAlpha(0.4);
+    panel.setScale(12, 4.2);
   }
 }

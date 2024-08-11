@@ -5,4 +5,5 @@ export enum ImageEnum {
   StoneButtonHovered = 'StoneButtonHovered',
   StoneButtonReady = 'StoneButtonReady',
   ButtonBeige = 'ButtonBeige',
+  PanelBeige = 'PanelBeige',
 }
