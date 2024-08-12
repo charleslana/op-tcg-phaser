@@ -43,6 +43,7 @@ export class Deck extends Scene {
     this.createDeckInPanel();
     this.createDeckFilter();
     this.createDeckOutPanel();
+    this.createCardList();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -433,5 +434,117 @@ export class Deck extends Scene {
     panel.setPosition(630, 840);
     panel.setAlpha(0.4);
     panel.setScale(12, 4.2);
+  }
+
+  private createCardList(): void {
+    const COLOR_MAIN = 0x4e342e;
+    const COLOR_LIGHT = 0x7b5e57;
+    const COLOR_DARK = 0x260e04;
+
+    const scrollMode = 0;
+    const scrollablePanel = this.rexUI.add
+      .scrollablePanel({
+        x: 640,
+        y: 840,
+        width: 1180,
+        height: 400,
+
+        scrollMode: scrollMode,
+
+        // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_MAIN),
+
+        panel: {
+          child: this.createGrid(this, scrollMode),
+          mask: {
+            // mask: true,
+            padding: 1,
+          },
+        },
+
+        slider: {
+          track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, COLOR_DARK),
+          thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, COLOR_LIGHT),
+          // position: 'left'
+        },
+
+        mouseWheelScroller: {
+          focus: false,
+          speed: 0.1,
+        },
+
+        space: {
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+
+          panel: 10,
+          header: 10,
+          footer: 10,
+        },
+      })
+      .setOrigin(0, 0.5)
+      .layout();
+
+    const print = this.add.text(0, 0, '');
+
+    scrollablePanel
+      .setChildrenInteractive({})
+      .on('child.over', function (child: any, pointer: any, event: any) {
+        print.text += `Pointer Over ${child.text}\n`;
+      })
+      .on('child.out', function (child: any, pointer: any, event: any) {
+        print.text += `Pointer Out ${child.text}\n`;
+      })
+      .on('child.click', function (child: any, pointer: any, event: any) {
+        print.text += `Click ${child.text}\n`;
+      })
+      .on('child.pressstart', function (child: any, pointer: any, event: any) {
+        print.text += `Press ${child.text}\n`;
+      });
+  }
+
+  private createGrid(scene: Scene, orientation: any) {
+    const COLOR_LIGHT = 0x7b5e57;
+    const COLOR_DARK = 0x260e04;
+    const sizer = scene.rexUI.add.fixWidthSizer({
+      // orientation: orientation,
+      space: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        item: 0,
+        line: 0,
+      },
+    });
+    // .addBackground(scene.rexUI.add.roundRectangle(0, 0, 10, 10, 0, COLOR_DARK));
+    const width = 100;
+    const height = 150;
+    for (let i = 0; i < 200; i++) {
+      sizer.add(
+        // scene.rexUI.add.label({
+        //   width: 60,
+        //   height: 60,
+
+        //   background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 14, COLOR_LIGHT),
+        //   text: scene.add.text(0, 0, `${i}`, {
+        //     fontSize: 18,
+        //   }),
+
+        //   align: 'center',
+        //   space: {
+        //     left: 10,
+        //     right: 10,
+        //     top: 10,
+        //     bottom: 10,
+        //   },
+        // })
+        this.add.image(0, 0, ImageEnum.ST01_001_Card).setOrigin(0).setDisplaySize(width, height),
+        { key: '1' }
+      );
+    }
+
+    return sizer;
   }
 }
