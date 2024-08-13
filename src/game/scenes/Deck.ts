@@ -1,3 +1,5 @@
+import * as Phaser from 'phaser';
+import ScrollablePanel from 'phaser3-rex-plugins/templates/ui/scrollablepanel/ScrollablePanel';
 import SimpleDropDownList from 'phaser3-rex-plugins/templates/ui/simpledropdownlist/SimpleDropDownList';
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { DeckInterface } from '../interfaces/deck-interface';
@@ -24,6 +26,7 @@ export class Deck extends Scene {
   private purpleFilter = false;
   private yellowFilter = false;
   private searchTerm: InputText = <InputText>{};
+  private cardContainer: Phaser.GameObjects.Container = <Phaser.GameObjects.Container>{};
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.DeckBackground).setOrigin(0);
@@ -44,6 +47,7 @@ export class Deck extends Scene {
     this.createDeckFilter();
     this.createDeckOutPanel();
     this.createCardList();
+    this.createShowCard();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -437,10 +441,8 @@ export class Deck extends Scene {
   }
 
   private createCardList(): void {
-    const COLOR_MAIN = 0x4e342e;
     const COLOR_LIGHT = 0x7b5e57;
     const COLOR_DARK = 0x260e04;
-
     const scrollMode = 0;
     const scrollablePanel = this.rexUI.add
       .scrollablePanel({
@@ -448,30 +450,21 @@ export class Deck extends Scene {
         y: 840,
         width: 1180,
         height: 400,
-
         scrollMode: scrollMode,
-
-        // background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 10, COLOR_MAIN),
-
         panel: {
-          child: this.createGrid(this, scrollMode),
+          child: this.createGrid(this),
           mask: {
-            // mask: true,
             padding: 1,
           },
         },
-
         slider: {
           track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, COLOR_DARK),
           thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, COLOR_LIGHT),
-          // position: 'left'
         },
-
         mouseWheelScroller: {
           focus: false,
           speed: 0.1,
         },
-
         space: {
           left: 10,
           right: 10,
@@ -485,30 +478,31 @@ export class Deck extends Scene {
       })
       .setOrigin(0, 0.5)
       .layout();
+    this.addPanelEventListeners(scrollablePanel);
+  }
 
-    const print = this.add.text(0, 0, '');
-
+  private addPanelEventListeners(scrollablePanel: ScrollablePanel): void {
+    const self = this;
     scrollablePanel
       .setChildrenInteractive({})
-      .on('child.over', function (child: any, pointer: any, event: any) {
-        print.text += `Pointer Over ${child.text}\n`;
+      .on('child.over', function (child: Phaser.GameObjects.Image) {
+        console.log(`Pointer Over ${child.getData('id')}\n`);
+        self.cardContainer.setVisible(true);
       })
-      .on('child.out', function (child: any, pointer: any, event: any) {
-        print.text += `Pointer Out ${child.text}\n`;
+      .on('child.out', function (child: Phaser.GameObjects.Image) {
+        console.log(`Pointer Out ${child.getData('id')}\n`);
+        self.cardContainer.setVisible(false);
       })
-      .on('child.click', function (child: any, pointer: any, event: any) {
-        print.text += `Click ${child.text}\n`;
+      .on('child.click', function (child: Phaser.GameObjects.Image) {
+        console.log(`Click ${child.getData('id')}\n`);
       })
-      .on('child.pressstart', function (child: any, pointer: any, event: any) {
-        print.text += `Press ${child.text}\n`;
+      .on('child.pressstart', function (child: Phaser.GameObjects.Image) {
+        console.log(`Press ${child.getData('id')}\n`);
       });
   }
 
-  private createGrid(scene: Scene, orientation: any) {
-    const COLOR_LIGHT = 0x7b5e57;
-    const COLOR_DARK = 0x260e04;
+  private createGrid(scene: Scene) {
     const sizer = scene.rexUI.add.fixWidthSizer({
-      // orientation: orientation,
       space: {
         left: 0,
         right: 0,
@@ -518,33 +512,80 @@ export class Deck extends Scene {
         line: 0,
       },
     });
-    // .addBackground(scene.rexUI.add.roundRectangle(0, 0, 10, 10, 0, COLOR_DARK));
     const width = 100;
     const height = 150;
     for (let i = 0; i < 200; i++) {
       sizer.add(
-        // scene.rexUI.add.label({
-        //   width: 60,
-        //   height: 60,
-
-        //   background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 14, COLOR_LIGHT),
-        //   text: scene.add.text(0, 0, `${i}`, {
-        //     fontSize: 18,
-        //   }),
-
-        //   align: 'center',
-        //   space: {
-        //     left: 10,
-        //     right: 10,
-        //     top: 10,
-        //     bottom: 10,
-        //   },
-        // })
-        this.add.image(0, 0, ImageEnum.ST01_001_Card).setOrigin(0).setDisplaySize(width, height),
-        { key: '1' }
+        this.add
+          .image(0, 0, ImageEnum.ST01_001_Card)
+          .setOrigin(0)
+          .setDisplaySize(width, height)
+          .setData('id', `card_${i}`)
       );
     }
-
     return sizer;
+  }
+
+  private createShowCard(): void {
+    this.cardContainer = this.add.container(300, 600);
+    const image = this.createImage();
+    this.cardContainer.add(image);
+    const { width, height } = this.createStripe();
+    const text = this.createText(width);
+    this.adjustFontSizeToFit(text, height - 20, 10);
+    text.setY(0);
+    this.cardContainer.add(text);
+    this.cardContainer.setSize(480, 671);
+    this.cardContainer.setVisible(false);
+  }
+
+  private createImage(): Phaser.GameObjects.Image {
+    return this.add
+      .image(0, 0, ImageEnum.ST01_001_Card)
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(480, 671);
+  }
+
+  private createStripe(): { width: number; height: number } {
+    const width = 430;
+    const height = 100;
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0xffffff, 0.7);
+    graphics.fillRect(-width / 2, -height / 2, width, height);
+    this.cardContainer.add(graphics);
+    return { width, height };
+  }
+
+  private createText(width: number): Phaser.GameObjects.Text {
+    return this.add
+      .text(
+        0,
+        0,
+        '[Ativar: Principal] [Uma vez por turno] Dê a este Líder ou até 1 dos seus Personagens descansado 1 carta DON!!.',
+        {
+          fontSize: '20px',
+          color: '#000000',
+          fontFamily: 'LiberationSans',
+          align: 'center',
+          wordWrap: { width: width - 20 },
+          fixedWidth: width - 20,
+        }
+      )
+      .setOrigin(0.5, 0.5);
+  }
+
+  private adjustFontSizeToFit(
+    text: Phaser.GameObjects.Text,
+    maxHeight: number,
+    minFontSize: number
+  ): void {
+    let fontSize = parseInt(text.style.fontSize.toString(), 10);
+    text.setFontSize(fontSize);
+    let textBounds = text.getBounds();
+    while (textBounds.height > maxHeight && fontSize > minFontSize) {
+      fontSize -= 1;
+      text.setFontSize(fontSize);
+      textBounds = text.getBounds();
+    }
   }
 }
