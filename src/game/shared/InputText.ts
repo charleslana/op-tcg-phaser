@@ -44,6 +44,7 @@ export class InputText extends Phaser.GameObjects.Container {
 
   public updateName(nameText: string): void {
     this.inputState.nameText.setText(nameText);
+    this.inputState.name = nameText;
   }
 
   private initializeKeyboard(): void {
