@@ -44,6 +44,7 @@ export class Deck extends Scene {
     this.createBackButton();
     this.createClearDeckButton();
     this.createDeckInPanel();
+    this.createDeckList();
     this.createDeckFilter();
     this.createDeckOutPanel();
     this.createCardList();
@@ -294,6 +295,102 @@ export class Deck extends Scene {
     panel.setScale(12, 4.2);
   }
 
+  private createDeckList(): void {
+    const COLOR_LIGHT = 0x7b5e57;
+    const COLOR_DARK = 0x260e04;
+    const scrollMode = 0;
+    const scrollablePanel = this.rexUI.add
+      .scrollablePanel({
+        x: 640,
+        y: 270,
+        width: 1180,
+        height: 400,
+        scrollMode: scrollMode,
+        panel: {
+          child: this.createDeckGrid(this),
+          mask: {
+            padding: 1,
+          },
+        },
+        slider: {
+          track: this.rexUI.add.roundRectangle(0, 0, 20, 10, 10, COLOR_DARK),
+          thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, COLOR_LIGHT),
+        },
+        mouseWheelScroller: {
+          focus: true,
+          speed: 0.1,
+        },
+        space: {
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10,
+          panel: 10,
+          header: 10,
+          footer: 10,
+        },
+      })
+      .setOrigin(0, 0.5)
+      .layout();
+    this.addDeckPanelEventListeners(scrollablePanel);
+  }
+
+  private addDeckPanelEventListeners(scrollablePanel: ScrollablePanel): void {
+    const self = this;
+    scrollablePanel
+      .setChildrenInteractive({})
+      .on('child.over', function (child: Phaser.GameObjects.Image | Phaser.GameObjects.Container) {
+        console.log(`Pointer Over ${child.getData('id')}\n`);
+        self.cardContainer.setVisible(true);
+      })
+      .on('child.out', function (child: Phaser.GameObjects.Image | Phaser.GameObjects.Container) {
+        console.log(`Pointer Out ${child.getData('id')}\n`);
+        self.cardContainer.setVisible(false);
+      })
+      .on('child.click', function (child: Phaser.GameObjects.Image | Phaser.GameObjects.Container) {
+        console.log(`Click ${child.getData('id')}\n`);
+      })
+      .on(
+        'child.pressstart',
+        function (child: Phaser.GameObjects.Image | Phaser.GameObjects.Container) {
+          console.log(`Press ${child.getData('id')}\n`);
+        }
+      );
+  }
+
+  private createDeckGrid(scene: Scene) {
+    const sizer = scene.rexUI.add.fixWidthSizer({
+      space: {
+        left: 20,
+        right: 0,
+        top: 80,
+        bottom: 0,
+        item: 35,
+        line: 40,
+      },
+    });
+    const cardWidth = 100;
+    const cardHeight = 150;
+    const cards = 16;
+    const cardsPerRow = 4;
+    for (let row = 0; row < cards; row++) {
+      const cardGroup = scene.add.container();
+      for (let col = 0; col < cardsPerRow; col++) {
+        const card = scene.add
+          .image(0, 0, ImageEnum.ST01_002_Card)
+          .setOrigin(0.5, 1)
+          .setDisplaySize(cardWidth, cardHeight);
+        card.setPosition(col * 9, col * 11);
+        cardGroup
+          .add(card)
+          .setData('id', `card_${row}`)
+          .setSize(card.displayWidth, card.displayHeight);
+      }
+      sizer.add(cardGroup);
+    }
+    return sizer;
+  }
+
   private createDeckFilter(): void {
     const redFilter = this.createRedFilter();
     const blueFilter = this.createBlueFilter(redFilter);
@@ -452,7 +549,7 @@ export class Deck extends Scene {
         height: 400,
         scrollMode: scrollMode,
         panel: {
-          child: this.createGrid(this),
+          child: this.createCardGrid(this),
           mask: {
             padding: 1,
           },
@@ -462,7 +559,7 @@ export class Deck extends Scene {
           thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 13, COLOR_LIGHT),
         },
         mouseWheelScroller: {
-          focus: false,
+          focus: true,
           speed: 0.1,
         },
         space: {
@@ -470,7 +567,6 @@ export class Deck extends Scene {
           right: 10,
           top: 10,
           bottom: 10,
-
           panel: 10,
           header: 10,
           footer: 10,
@@ -478,10 +574,10 @@ export class Deck extends Scene {
       })
       .setOrigin(0, 0.5)
       .layout();
-    this.addPanelEventListeners(scrollablePanel);
+    this.addCardPanelEventListeners(scrollablePanel);
   }
 
-  private addPanelEventListeners(scrollablePanel: ScrollablePanel): void {
+  private addCardPanelEventListeners(scrollablePanel: ScrollablePanel): void {
     const self = this;
     scrollablePanel
       .setChildrenInteractive({})
@@ -501,10 +597,10 @@ export class Deck extends Scene {
       });
   }
 
-  private createGrid(scene: Scene) {
+  private createCardGrid(scene: Scene) {
     const sizer = scene.rexUI.add.fixWidthSizer({
       space: {
-        left: 0,
+        left: 10,
         right: 0,
         top: 0,
         bottom: 0,
