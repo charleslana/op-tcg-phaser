@@ -19,6 +19,7 @@ export class Filter extends Phaser.GameObjects.Container {
 
   public create(): void {
     this.createDeckFilter();
+    this.createCountTotalCard();
   }
 
   private createDeckFilter(): void {
@@ -92,37 +93,6 @@ export class Filter extends Phaser.GameObjects.Container {
     );
   }
 
-  private createSearchTermInput(
-    redFilter: number,
-    blueFilter: number,
-    yellowFilter: number,
-    limitCard: number
-  ): void {
-    this.inputSearchTerm = new InputText(this.scene);
-    this.inputSearchTerm.placeholder = 'Pesquisar';
-    this.inputSearchTerm.create();
-    this.inputSearchTerm.changePosition(
-      650 + redFilter + blueFilter + yellowFilter + limitCard + 100,
-      520 + 30
-    );
-  }
-
-  private createCardCountText(
-    redFilter: number,
-    blueFilter: number,
-    yellowFilter: number,
-    limitCard: number
-  ): void {
-    const text = this.scene.add
-      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '51 / 51', {
-        fontSize: '30px',
-        color: '#000000',
-        fontFamily: 'LiberationSans',
-      })
-      .setOrigin(0, 0.5);
-    text.setLetterSpacing(0);
-  }
-
   private createCheckbox(
     positionX: number,
     positionY: number,
@@ -157,5 +127,45 @@ export class Filter extends Phaser.GameObjects.Container {
       });
     }
     return checkbox.width + labelText.width + 30;
+  }
+
+  private createSearchTermInput(
+    redFilter: number,
+    blueFilter: number,
+    yellowFilter: number,
+    limitCard: number
+  ): void {
+    this.inputSearchTerm = new InputText(this.scene);
+    this.inputSearchTerm.placeholder = 'Pesquisar';
+    this.inputSearchTerm.create();
+    this.inputSearchTerm.changePosition(
+      650 + redFilter + blueFilter + yellowFilter + limitCard + 100,
+      520 + 30
+    );
+  }
+
+  private createCardCountText(
+    redFilter: number,
+    blueFilter: number,
+    yellowFilter: number,
+    limitCard: number
+  ): void {
+    const text = this.scene.add
+      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '51 / 51', {
+        fontSize: '30px',
+        color: '#000000',
+        fontFamily: 'LiberationSans',
+      })
+      .setOrigin(0, 0.5);
+    text.setLetterSpacing(0);
+  }
+
+  private createCountTotalCard(): void {
+    const { width, height } = this.scene.scale;
+    this.scene.add.text(width / 2 + 200, height / 2 + 60, 'Total cartas: 1400', {
+      fontSize: '25px',
+      color: '#000000',
+      fontFamily: 'LiberationSans',
+    });
   }
 }

@@ -45,6 +45,18 @@ export class HomeScene extends Scene {
       scaleY: 1.5,
     });
     buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Login));
+    this.createUserNameText(buttonCreate);
+  }
+
+  private createUserNameText(buttonImage: Phaser.GameObjects.Image): void {
+    const distance = 20;
+    this.add
+      .text(buttonImage.x - buttonImage.displayWidth / 2 - distance, buttonImage.y, 'Charles', {
+        fontSize: '45px',
+        color: '#000000',
+        fontFamily: 'LiberationSans',
+      })
+      .setOrigin(1, 0.5);
   }
 
   private createDeckButton(): void {
