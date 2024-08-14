@@ -21,6 +21,13 @@ export class FloatingCard extends Phaser.GameObjects.Container {
     this.createShowCard();
   }
 
+  public destroy(fromScene: boolean = false): void {
+    EventBus.off('set-image-card', this.setImageCardContainer, this);
+    EventBus.off('set-visible-card', this.setVisibleCardContainer, this);
+    EventBus.off('set-description-card', this.setDescriptionCard, this);
+    super.destroy(fromScene);
+  }
+
   private createShowCard(): void {
     this.cardContainer = this.scene.add.container(300, 600);
     this.imageCardContainer = this.createImage();

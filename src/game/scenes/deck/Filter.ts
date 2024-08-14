@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { InputText } from '@/game/shared/InputText';
+import { useCardStore } from '@/stores/card-store';
 
 export class Filter extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -162,10 +163,16 @@ export class Filter extends Phaser.GameObjects.Container {
 
   private createCountTotalCard(): void {
     const { width, height } = this.scene.scale;
-    this.scene.add.text(width / 2 + 200, height / 2 + 60, 'Total cartas: 1400', {
-      fontSize: '25px',
-      color: '#000000',
-      fontFamily: 'LiberationSans',
-    });
+    const cardStore = useCardStore();
+    this.scene.add.text(
+      width / 2 + 200,
+      height / 2 + 60,
+      `Total cartas: ${cardStore.cards.length}`,
+      {
+        fontSize: '25px',
+        color: '#000000',
+        fontFamily: 'LiberationSans',
+      }
+    );
   }
 }
