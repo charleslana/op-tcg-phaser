@@ -58,7 +58,6 @@ export class DeckScene extends Scene {
 
   private createDecksDropdown(): void {
     const style = this.getDropdownStyle();
-    // const options = this.getDropdownOptions();
     const options = this.userStore.user.decks.map(deck => ({
       text: deck.name,
       value: deck.id,
@@ -102,62 +101,6 @@ export class DeckScene extends Scene {
       },
     };
   }
-
-  // private getDropdownOptions(): { text: string; value: number }[] {
-  //   const options = [
-  //     { text: 'Deck A', value: 1 },
-  //     { text: 'Deck B Colocar limite de cha', value: 2 },
-  //     { text: 'Deck C', value: 3 },
-  //     { text: 'Deck D', value: 4 },
-  //     { text: 'Deck E', value: 5 },
-  //     { text: 'Deck F', value: 6 },
-  //     { text: 'Deck G', value: 7 },
-  //     { text: 'Deck H', value: 8 },
-  //     { text: 'Deck I', value: 9 },
-  //     { text: 'Deck J', value: 10 },
-  //     { text: 'Deck K', value: 11 },
-  //     { text: 'Deck L', value: 12 },
-  //     { text: 'Deck M', value: 13 },
-  //     { text: 'Deck N', value: 14 },
-  //     { text: 'Deck O', value: 15 },
-  //     { text: 'Deck P', value: 16 },
-  //     { text: 'Deck Q', value: 17 },
-  //     { text: 'Deck R', value: 18 },
-  //     { text: 'Deck S', value: 19 },
-  //     { text: 'Deck T', value: 20 },
-  //     { text: 'Deck U', value: 21 },
-  //     { text: 'Deck V', value: 22 },
-  //     { text: 'Deck W', value: 23 },
-  //     { text: 'Deck X', value: 24 },
-  //     { text: 'Deck Y', value: 25 },
-  //     { text: 'Deck Z', value: 26 },
-  //     { text: 'Deck AA', value: 27 },
-  //     { text: 'Deck AB', value: 28 },
-  //     { text: 'Deck AC', value: 29 },
-  //     { text: 'Deck AD', value: 30 },
-  //     { text: 'Deck AE', value: 31 },
-  //     { text: 'Deck AF', value: 32 },
-  //     { text: 'Deck AG', value: 33 },
-  //     { text: 'Deck AH', value: 34 },
-  //     { text: 'Deck AI', value: 35 },
-  //     { text: 'Deck AJ', value: 36 },
-  //     { text: 'Deck AK', value: 37 },
-  //     { text: 'Deck AL', value: 38 },
-  //     { text: 'Deck AM', value: 39 },
-  //     { text: 'Deck AN', value: 40 },
-  //     { text: 'Deck AO', value: 41 },
-  //     { text: 'Deck AP', value: 42 },
-  //     { text: 'Deck AQ', value: 43 },
-  //     { text: 'Deck AR', value: 44 },
-  //     { text: 'Deck AS', value: 45 },
-  //     { text: 'Deck AT', value: 46 },
-  //     { text: 'Deck AU', value: 47 },
-  //     { text: 'Deck AV', value: 48 },
-  //     { text: 'Deck AW', value: 49 },
-  //     { text: 'Deck AX', value: 50 },
-  //   ];
-  //   return options;
-  // }
 
   private setupDropdownEvents(): void {
     const self = this;

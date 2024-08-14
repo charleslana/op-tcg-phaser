@@ -33,7 +33,7 @@ const decks: UserDeckInterface[] = [
   {
     id: 1,
     name: 'Deck A',
-    equipped: false,
+    equipped: true,
     cards: finalDeck,
   },
   {
@@ -45,7 +45,7 @@ const decks: UserDeckInterface[] = [
   {
     id: 2,
     name: 'Deck C',
-    equipped: true,
+    equipped: false,
     cards: finalDeck,
   },
 ];
