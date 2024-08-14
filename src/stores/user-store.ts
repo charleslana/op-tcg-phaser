@@ -14,10 +14,13 @@ export const useUserStore = defineStore('user', () => {
   function setUser(newUser: UserInterface) {
     user.value = newUser;
   }
+  function getDeck(deckId: number): UserDeckInterface | undefined {
+    return user.value.decks.find(deck => deck.id === deckId);
+  }
   function setData() {
     user.value = data;
   }
-  return { user, setUser, setData };
+  return { user, setUser, setData, getDeck };
 });
 
 const leaderCard = dataCard[0];
