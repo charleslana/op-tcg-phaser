@@ -1,7 +1,8 @@
 import * as Phaser from 'phaser';
 import ScrollablePanel from 'phaser3-rex-plugins/templates/ui/scrollablepanel/ScrollablePanel';
+import { CardInterface } from '@/game/interfaces/card-interface';
 import { EventBus } from '@/game/EventBus';
-import { ImageEnum } from '@/game/enums/image-enum';
+import { getImageEnum, ImageEnum } from '@/game/enums/image-enum';
 
 export class Deck extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -10,9 +11,23 @@ export class Deck extends Phaser.GameObjects.Container {
     this.create();
   }
 
+  private scrollablePanel: ScrollablePanel = <ScrollablePanel>{};
+  private cards: CardInterface[] = [];
+
   public create(): void {
     this.createDeckPanel();
     this.createDeck();
+  }
+
+  public updateCards(cards: CardInterface[]): void {
+    this.clearDeck();
+    this.cards = cards;
+    this.createDeck();
+  }
+
+  public clearDeck(): void {
+    this.cards = [];
+    this.scrollablePanel.clear(true);
   }
 
   private createDeckPanel(): void {
@@ -27,7 +42,7 @@ export class Deck extends Phaser.GameObjects.Container {
     const COLOR_LIGHT = 0x7b5e57;
     const COLOR_DARK = 0x260e04;
     const scrollMode = 0;
-    const scrollablePanel = this.scene.rexUI.add
+    this.scrollablePanel = this.scene.rexUI.add
       .scrollablePanel({
         x: 640,
         y: 270,
@@ -60,7 +75,7 @@ export class Deck extends Phaser.GameObjects.Container {
       })
       .setOrigin(0, 0.5)
       .layout();
-    this.addDeckPanelEventListeners(scrollablePanel);
+    this.addDeckPanelEventListeners(this.scrollablePanel);
   }
 
   private addDeckPanelEventListeners(scrollablePanel: ScrollablePanel): void {
@@ -68,6 +83,7 @@ export class Deck extends Phaser.GameObjects.Container {
       .setChildrenInteractive({})
       .on('child.over', function (child: Phaser.GameObjects.Image | Phaser.GameObjects.Container) {
         console.log(`Pointer Over ${child.getData('id')}\n`);
+        EventBus.emit('set-image-card', getImageEnum(child.getData('image')));
         EventBus.emit('set-visible-card', true);
         EventBus.emit('set-description-card', child.getData('descriptionPt'));
       })
@@ -99,20 +115,32 @@ export class Deck extends Phaser.GameObjects.Container {
     });
     const cardWidth = 100;
     const cardHeight = 150;
-    const cards = 16;
-    const cardsPerRow = 4;
-    for (let row = 0; row < cards; row++) {
+    const groupedCards: { [key: string]: CardInterface[] } = this.cards.reduce(
+      (acc: { [key: string]: CardInterface[] }, card: CardInterface) => {
+        if (!acc[card.id]) {
+          acc[card.id] = [];
+        }
+        acc[card.id].push(card);
+        return acc;
+      },
+      {}
+    );
+    for (const cardId in groupedCards) {
       const cardGroup = this.scene.add.container();
-      for (let col = 0; col < cardsPerRow; col++) {
-        const card = this.scene.add
-          .image(0, 0, ImageEnum.ST01_002_Card)
+      const duplicateCount = groupedCards[cardId].length;
+      for (let col = 0; col < duplicateCount; col++) {
+        const card = groupedCards[cardId][col];
+        const cardImage = this.scene.add
+          .image(0, 0, getImageEnum(card.image))
           .setOrigin(0.5, 1)
           .setDisplaySize(cardWidth, cardHeight);
-        card.setPosition(col * 9, col * 11);
+        cardImage.setPosition(col * 9, col * 11);
         cardGroup
-          .add(card)
-          .setData('id', `card_${row}`)
-          .setSize(card.displayWidth, card.displayHeight);
+          .add(cardImage)
+          .setData('id', groupedCards[cardId][col].id)
+          .setData('image', groupedCards[cardId][col].image)
+          .setData('descriptionPt', groupedCards[cardId][col].descriptionPt)
+          .setSize(cardImage.displayWidth, cardImage.displayHeight);
       }
       sizer.add(cardGroup);
     }

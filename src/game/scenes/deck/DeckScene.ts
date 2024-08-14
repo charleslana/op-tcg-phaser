@@ -192,6 +192,10 @@ export class DeckScene extends Scene {
     if (this.deckSelected.id !== 0) {
       this.inputName.text = this.deckSelected.name;
       this.inputName.updateName(this.deckSelected.name);
+      const deck = this.userStore.getDeck(this.deckSelected.id);
+      if (deck) {
+        this.deck.updateCards(deck.cards);
+      }
     }
   }
 
@@ -287,5 +291,6 @@ export class DeckScene extends Scene {
     this.deckSelected = <UserDeckInterface>{ id: 0 };
     this.inputName.text = '';
     this.inputName.updateName(this.inputName.placeholder);
+    this.deck.clearDeck();
   }
 }
