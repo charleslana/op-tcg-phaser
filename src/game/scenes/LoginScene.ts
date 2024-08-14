@@ -7,7 +7,7 @@ import { SceneEnum } from '../enums/scene-enum';
 import { useUserStore } from '@/stores/user-store';
 import { Version } from '../shared/Version';
 
-export class Login extends Scene {
+export class LoginScene extends Scene {
   constructor() {
     super(SceneEnum.Login);
   }
@@ -20,7 +20,7 @@ export class Login extends Scene {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
     backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
     const userStore = useUserStore();
-    userStore.setUserId(1);
+    userStore.setUser({ id: 1, username: '', name: 'Jogador', decks: [] });
   }
 
   create() {

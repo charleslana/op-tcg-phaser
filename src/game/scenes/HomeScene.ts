@@ -5,7 +5,7 @@ import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
 import { Version } from '../shared/Version';
 
-export class Home extends Scene {
+export class HomeScene extends Scene {
   constructor() {
     super(SceneEnum.Home);
   }

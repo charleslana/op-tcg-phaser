@@ -2,7 +2,7 @@ import { ImageEnum } from '../enums/image-enum';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
 
-export class Preloader extends Scene {
+export class PreloaderScene extends Scene {
   constructor() {
     super(SceneEnum.Preloader);
   }

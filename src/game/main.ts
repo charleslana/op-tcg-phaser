@@ -1,11 +1,11 @@
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import { AUTO, Game } from 'phaser';
-import { Boot } from './scenes/Boot';
-import { Deck } from './scenes/Deck';
-import { Home } from './scenes/Home';
-import { Login } from './scenes/Login';
-import { Preloader } from './scenes/Preloader';
-import { Register } from './scenes/Register';
+import { BootScene } from './scenes/BootScene';
+import { DeckScene } from './scenes/deck/DeckScene';
+import { HomeScene } from './scenes/HomeScene';
+import { LoginScene } from './scenes/LoginScene';
+import { PreloaderScene } from './scenes/PreloaderScene';
+import { RegisterScene } from './scenes/RegisterScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
@@ -27,7 +27,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   parent: 'game-container',
   backgroundColor: '#ffffff',
-  scene: [Boot, Preloader, Login, Register, Home, Deck],
+  scene: [BootScene, PreloaderScene, LoginScene, RegisterScene, HomeScene, DeckScene],
   plugins: {
     scene: [
       {

@@ -25,3 +25,18 @@ export enum ImageEnum {
   ST01_016_Card = 'ST01-016',
   ST01_017_Card = 'ST01-017',
 }
+
+export function getImageEnum(value: string): string {
+  const enumValue = Object.values(ImageEnum).find(enumValue => enumValue === value);
+  return enumValue ?? '';
+}
+
+const apiResponse = 'ST01-001';
+
+const imageEnumValue = getImageEnum(apiResponse);
+
+if (imageEnumValue) {
+  console.log('O valor é um valor válido do enum:', imageEnumValue);
+} else {
+  console.log('O valor não é um valor válido do enum.');
+}
