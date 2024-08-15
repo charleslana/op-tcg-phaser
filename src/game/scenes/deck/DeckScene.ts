@@ -103,9 +103,12 @@ export class DeckScene extends Scene {
         },
       },
       list: {
-        // @ts-ignore
         maxHeight: 400,
         sliderAdaptThumbSize: true,
+        mouseWheelScroller: {
+          focus: true,
+          speed: 0.1,
+        },
       },
     };
   }
