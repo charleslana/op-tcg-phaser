@@ -72,6 +72,7 @@ export class DeckScene extends Scene {
   }
 
   private getDropdownStyle(): SimpleDropDownList.IConfig {
+    const COLOR_LIGHT = 0x7b5e57;
     return {
       label: {
         space: { left: 0, right: 0, top: 20, bottom: 20 },
@@ -84,6 +85,8 @@ export class DeckScene extends Scene {
         },
         height: 20,
       },
+      track: { width: 10, color: 0xfffffff },
+      thumb: { width: 14, height: 14, color: COLOR_LIGHT },
       button: {
         space: { left: 10, right: 10, top: 20, bottom: 20 },
         background: {
@@ -98,6 +101,11 @@ export class DeckScene extends Scene {
           fontFamily: 'LiberationSans',
           color: 0xfffffff,
         },
+      },
+      list: {
+        // @ts-ignore
+        maxHeight: 400,
+        sliderAdaptThumbSize: true,
       },
     };
   }
