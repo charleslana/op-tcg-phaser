@@ -1,4 +1,5 @@
 import { CharacterTypeEnum } from '../enums/character-type-enum';
+import { ColorEnum } from '../enums/color-enum';
 
 export interface CardInterface {
   id: number;
@@ -7,4 +8,5 @@ export interface CardInterface {
   descriptionPt: string | null;
   descriptionEn: string | null;
   characterType: CharacterTypeEnum;
+  color: ColorEnum;
 }

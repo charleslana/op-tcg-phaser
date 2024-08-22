@@ -1,3 +1,5 @@
+import { CardInterface } from '@/game/interfaces/card-interface';
+import { ColorEnum } from '@/game/enums/color-enum';
 import { dataCard } from './card-store';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
@@ -25,9 +27,13 @@ export const useUserStore = defineStore('user', () => {
 
 const leaderCard = dataCard[0];
 const otherCards = dataCard.slice(1);
-let duplicatedCards = [...otherCards, ...otherCards, ...otherCards, ...otherCards];
-duplicatedCards = duplicatedCards.slice(0, 50);
-const finalDeck = [leaderCard, ...duplicatedCards];
+const redCards = otherCards.filter(card => card.color === ColorEnum.Red);
+let duplicatedRedCards: CardInterface[] = [];
+while (duplicatedRedCards.length < 50) {
+  duplicatedRedCards = [...duplicatedRedCards, ...redCards];
+}
+duplicatedRedCards = duplicatedRedCards.slice(0, 50);
+const finalDeck = [leaderCard, ...duplicatedRedCards];
 
 const decks: UserDeckInterface[] = [
   {
