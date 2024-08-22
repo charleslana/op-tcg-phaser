@@ -17,12 +17,14 @@ export class CardList extends Phaser.GameObjects.Container {
   private cards: CardInterface[] = [];
   private scrollablePanel: ScrollablePanel = <ScrollablePanel>{};
   private colors: ColorEnum[] = [];
+  private term: string = '';
 
   public create(): void {
     this.cards = this.cardStore.cards;
     this.createCardPanel();
     this.createCardList();
     EventBus.on('filter-card-color', this.filterCardByColor, this);
+    EventBus.on('filter-name', this.filterCardByTerm, this);
   }
 
   private createCardPanel(): void {
@@ -132,11 +134,18 @@ export class CardList extends Phaser.GameObjects.Container {
     } else {
       this.cards = this.cardStore.filterByColors(this.colors);
     }
-    this.updateCardGrid();
+    this.filterCardByTerm(this.term);
+    this.updateCardList();
   }
 
-  private updateCardGrid(): void {
+  private updateCardList(): void {
     this.scrollablePanel.clear(true);
     this.createCardList();
+  }
+
+  private filterCardByTerm(term: string): void {
+    this.term = term.trim();
+    this.cards = this.cardStore.searchByTerm(term.trim(), this.colors);
+    this.updateCardList();
   }
 }

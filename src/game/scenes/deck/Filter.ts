@@ -167,7 +167,7 @@ export class Filter extends Phaser.GameObjects.Container {
     yellowFilter: number,
     limitCard: number
   ): void {
-    this.inputSearchTerm = new InputText(this.scene, 'filterTerm');
+    this.inputSearchTerm = new InputText(this.scene, 'filterTerm', true, 25);
     this.inputSearchTerm.placeholder = 'Pesquisar';
     this.inputSearchTerm.create();
     this.inputSearchTerm.changePosition(
@@ -176,6 +176,7 @@ export class Filter extends Phaser.GameObjects.Container {
     );
     this.inputSearchTerm.onNameChanged((newName: string) => {
       console.log('Name changed to:', newName);
+      EventBus.emit('filter-name', newName);
     });
   }
 

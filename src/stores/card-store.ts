@@ -18,7 +18,27 @@ export const useCardStore = defineStore('cards', () => {
   function searchByTerm(searchTerm: string, colors: ColorEnum[] = []): CardInterface[] {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filteredByColor = colors.length > 0 ? filterByColors(colors) : cards.value;
-    return filteredByColor.filter(card => card.name.toLowerCase().includes(lowerCaseTerm));
+    const exactNameMatch = /^(\[.*\])$/.exec(searchTerm);
+    if (exactNameMatch) {
+      const nameInsideBrackets = searchTerm.slice(1, -1).toLowerCase();
+      return filteredByColor.filter(card => card.name.toLowerCase() === nameInsideBrackets);
+    }
+    const powerMatch = /^p(\d+)$/.exec(lowerCaseTerm);
+    if (powerMatch) {
+      const searchPower = parseInt(powerMatch[1], 10);
+      return filteredByColor.filter(card => card.power === searchPower);
+    }
+    const counterMatch = /^c(\d+)$/.exec(lowerCaseTerm);
+    if (counterMatch) {
+      const searchCounter = parseInt(counterMatch[1], 10);
+      return filteredByColor.filter(card => card.counter === searchCounter);
+    }
+    if (isNaN(parseInt(lowerCaseTerm.charAt(0), 10))) {
+      return filteredByColor.filter(card => card.name.toLowerCase().includes(lowerCaseTerm));
+    } else {
+      const searchCost = parseFloat(lowerCaseTerm);
+      return filteredByColor.filter(card => card.cost === searchCost);
+    }
   }
   return { cards, setCards, setData, filterByColors, searchByTerm };
 });
@@ -34,6 +54,7 @@ export const dataCard: CardInterface[] = [
       '[Activate: Main] [Once Per Turn] Give this Leader or up to 1 of your Characters 1 rested DON!! card.',
     characterType: CharacterTypeEnum.Leader,
     color: ColorEnum.Red,
+    power: 5000,
   },
   {
     id: 2,
@@ -45,15 +66,20 @@ export const dataCard: CardInterface[] = [
       '[DON!! X2] [When Attacking] Your opponent cannot activate a [Blocker] Character that has 5000 or more Power during this battle. [Trigger] Play this card.',
     characterType: CharacterTypeEnum.Character,
     color: ColorEnum.Red,
+    cost: 2,
+    power: 2000,
   },
   {
     id: 3,
-    name: '',
+    name: 'Karoo',
     image: 'ST01-003',
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
     color: ColorEnum.Red,
+    cost: 1,
+    power: 3000,
+    counter: 1000,
   },
   {
     id: 4,
@@ -63,6 +89,8 @@ export const dataCard: CardInterface[] = [
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
     color: ColorEnum.Red,
+    cost: 2,
+    power: 4000,
   },
   {
     id: 5,
@@ -72,6 +100,8 @@ export const dataCard: CardInterface[] = [
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
     color: ColorEnum.Red,
+    cost: 3,
+    power: 5000,
   },
   {
     id: 6,
@@ -84,12 +114,13 @@ export const dataCard: CardInterface[] = [
   },
   {
     id: 7,
-    name: '',
+    name: 'Nami',
     image: 'ST01-007',
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
     color: ColorEnum.Red,
+    counter: 1000,
   },
   {
     id: 8,
@@ -153,6 +184,7 @@ export const dataCard: CardInterface[] = [
     descriptionEn: '',
     characterType: CharacterTypeEnum.Event,
     color: ColorEnum.Red,
+    counter: 3000,
   },
   {
     id: 15,
@@ -192,7 +224,7 @@ export const dataCard: CardInterface[] = [
   },
   {
     id: 19,
-    name: '',
+    name: 'Vito',
     image: 'ST02-002',
     descriptionPt: '',
     descriptionEn: '',

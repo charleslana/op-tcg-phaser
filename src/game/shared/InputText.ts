@@ -4,10 +4,17 @@ import { ImageEnum } from '../enums/image-enum';
 import { InputStateInterface } from '../interfaces/input-state-interface';
 
 export class InputText extends Phaser.GameObjects.Container {
-  constructor(scene: Phaser.Scene, eventName = 'nameChanged') {
+  constructor(
+    scene: Phaser.Scene,
+    eventName = 'nameChanged',
+    allowSpecialCharacters = false,
+    maxLength = 16
+  ) {
     super(scene);
     this.scene.add.existing(this);
     this.eventName = eventName;
+    this.allowSpecialCharacters = allowSpecialCharacters;
+    this.maxLength = maxLength;
   }
 
   public placeholder = 'Enter your name...';
@@ -16,7 +23,9 @@ export class InputText extends Phaser.GameObjects.Container {
   private frame: Phaser.GameObjects.Image = {} as Phaser.GameObjects.Image;
   private inputState: InputStateInterface = {} as InputStateInterface;
   private cursorTween: Phaser.Tweens.Tween = {} as Phaser.Tweens.Tween;
-  private eventName: string = '';
+  private eventName: string;
+  private allowSpecialCharacters: boolean;
+  private maxLength: number;
 
   public create(): void {
     this.initializeKeyboard();
@@ -99,13 +108,13 @@ export class InputText extends Phaser.GameObjects.Container {
   }
 
   private handleKeyboardInput(event: KeyboardEvent): void {
-    const maxNameLength = 16;
+    const maxNameLength = this.maxLength;
     if (event.key === 'Backspace' && this.inputState.name.length > 0) {
       this.inputState.name = this.inputState.name.slice(0, -1);
       this.text = this.text.slice(0, -1);
     } else if (
       event.key.length === 1 &&
-      event.key.match(/[a-zA-Z0-9\s\-_]/) &&
+      (this.allowSpecialCharacters || event.key.match(/[a-zA-Z0-9\s\-_]/)) &&
       this.inputState.name.length < maxNameLength
     ) {
       this.text += event.key;
@@ -113,7 +122,26 @@ export class InputText extends Phaser.GameObjects.Container {
     } else if (this.inputState.name.length === maxNameLength) {
       this.scene.cameras.main.shake(30, 0.001, false);
     }
+    this.adjustFontSizeToFit();
     EventBus.emit(this.eventName, this.inputState.name);
+  }
+
+  private adjustFontSizeToFit(): void {
+    const frameWidth = this.frame.displayWidth - 20;
+    const text = this.inputState.nameText;
+    let fontSize = 23;
+    text.setStyle({ fontSize: `${fontSize}px` });
+    let textWidth = text.width;
+    while (textWidth + 15 > frameWidth) {
+      fontSize -= 1;
+      if (fontSize <= 1) {
+        fontSize = 1;
+        break;
+      }
+      text.setStyle({ fontSize: `${fontSize}px` });
+      textWidth = text.width;
+    }
+    this.inputState.formCursor.x = text.x + textWidth - 7;
   }
 
   private updateCursorPosition(): void {

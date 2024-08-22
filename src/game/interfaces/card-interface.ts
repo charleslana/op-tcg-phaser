@@ -9,4 +9,7 @@ export interface CardInterface {
   descriptionEn: string | null;
   characterType: CharacterTypeEnum;
   color: ColorEnum;
+  cost?: number;
+  power?: number;
+  counter?: number;
 }
