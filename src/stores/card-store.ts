@@ -12,7 +12,15 @@ export const useCardStore = defineStore('cards', () => {
   function setData() {
     cards.value = dataCard;
   }
-  return { cards, setCards, setData };
+  function filterByColors(colors: ColorEnum[]): CardInterface[] {
+    return cards.value.filter(card => colors.includes(card.color));
+  }
+  function searchByTerm(searchTerm: string, colors: ColorEnum[] = []): CardInterface[] {
+    const lowerCaseTerm = searchTerm.toLowerCase();
+    const filteredByColor = colors.length > 0 ? filterByColors(colors) : cards.value;
+    return filteredByColor.filter(card => card.name.toLowerCase().includes(lowerCaseTerm));
+  }
+  return { cards, setCards, setData, filterByColors, searchByTerm };
 });
 
 export const dataCard: CardInterface[] = [

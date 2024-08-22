@@ -1,11 +1,13 @@
 import * as Phaser from 'phaser';
+import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputStateInterface } from '../interfaces/input-state-interface';
 
 export class InputText extends Phaser.GameObjects.Container {
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: Phaser.Scene, eventName = 'nameChanged') {
     super(scene);
     this.scene.add.existing(this);
+    this.eventName = eventName;
   }
 
   public placeholder = 'Enter your name...';
@@ -14,6 +16,7 @@ export class InputText extends Phaser.GameObjects.Container {
   private frame: Phaser.GameObjects.Image = {} as Phaser.GameObjects.Image;
   private inputState: InputStateInterface = {} as InputStateInterface;
   private cursorTween: Phaser.Tweens.Tween = {} as Phaser.Tweens.Tween;
+  private eventName: string = '';
 
   public create(): void {
     this.initializeKeyboard();
@@ -45,6 +48,10 @@ export class InputText extends Phaser.GameObjects.Container {
   public updateName(nameText: string): void {
     this.inputState.nameText.setText(nameText);
     this.inputState.name = nameText;
+  }
+
+  public onNameChanged(listener: (name: string) => void): void {
+    EventBus.on(this.eventName, listener);
   }
 
   private initializeKeyboard(): void {
@@ -106,6 +113,7 @@ export class InputText extends Phaser.GameObjects.Container {
     } else if (this.inputState.name.length === maxNameLength) {
       this.scene.cameras.main.shake(30, 0.001, false);
     }
+    EventBus.emit(this.eventName, this.inputState.name);
   }
 
   private updateCursorPosition(): void {
@@ -181,6 +189,7 @@ export class InputText extends Phaser.GameObjects.Container {
       this.inputState.hiddenInput.addEventListener('input', event => {
         const target = event.target as HTMLInputElement;
         this.inputState.name = target.value;
+        EventBus.emit(this.eventName, target.value);
       });
     }
   }

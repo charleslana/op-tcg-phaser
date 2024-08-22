@@ -1,6 +1,18 @@
 import * as Phaser from 'phaser';
+import { ColorEnum } from '@/game/enums/color-enum';
+import { EventBus } from '@/game/EventBus';
 import { InputText } from '@/game/shared/InputText';
 import { useCardStore } from '@/stores/card-store';
+
+export interface FilterEnum {
+  positionX: number;
+  positionY: number;
+  text: string;
+  onChange?: (value: boolean) => void;
+  readOnly?: boolean;
+  checked?: boolean;
+  color?: ColorEnum;
+}
 
 export class Filter extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -36,47 +48,63 @@ export class Filter extends Phaser.GameObjects.Container {
   }
 
   private createRedFilter(): number {
-    return this.createCheckbox(650, 520, 'Vermelho', (value: boolean) => (this.redFilter = value));
+    return this.createCheckbox({
+      positionX: 650,
+      positionY: 520,
+      text: 'Vermelho',
+      onChange: (value: boolean) => (this.redFilter = value),
+      color: ColorEnum.Red,
+    });
   }
 
   private createBlueFilter(redFilter: number): number {
-    return this.createCheckbox(
-      650 + redFilter,
-      520,
-      'Azul',
-      (value: boolean) => (this.blueFilter = value)
-    );
+    return this.createCheckbox({
+      positionX: 650 + redFilter,
+      positionY: 520,
+      text: 'Azul',
+      onChange: (value: boolean) => (this.blueFilter = value),
+      color: ColorEnum.Blue,
+    });
   }
 
   private createBlackFilter(redFilter: number, blueFilter: number): void {
-    this.createCheckbox(
-      650 + redFilter + blueFilter,
-      520,
-      'Preto',
-      (value: boolean) => (this.blueFilter = value)
-    );
+    this.createCheckbox({
+      positionX: 650 + redFilter + blueFilter,
+      positionY: 520,
+      text: 'Preto',
+      onChange: (value: boolean) => (this.blackFilter = value),
+      color: ColorEnum.Black,
+    });
   }
 
   private createGreenFilter(): void {
-    this.createCheckbox(650, 520 + 60, 'Verde', (value: boolean) => (this.greenFilter = value));
+    this.createCheckbox({
+      positionX: 650,
+      positionY: 520 + 60,
+      text: 'Verde',
+      onChange: (value: boolean) => (this.greenFilter = value),
+      color: ColorEnum.Green,
+    });
   }
 
   private createPurpleFilter(redFilter: number): void {
-    this.createCheckbox(
-      650 + redFilter,
-      520 + 60,
-      'Roxo',
-      (value: boolean) => (this.purpleFilter = value)
-    );
+    this.createCheckbox({
+      positionX: 650 + redFilter,
+      positionY: 520 + 60,
+      text: 'Roxo',
+      onChange: (value: boolean) => (this.purpleFilter = value),
+      color: ColorEnum.Purple,
+    });
   }
 
   private createYellowFilter(redFilter: number, blueFilter: number): number {
-    return this.createCheckbox(
-      650 + redFilter + blueFilter,
-      520 + 60,
-      'Amarelo',
-      (value: boolean) => (this.yellowFilter = value)
-    );
+    return this.createCheckbox({
+      positionX: 650 + redFilter + blueFilter,
+      positionY: 520 + 60,
+      text: 'Amarelo',
+      onChange: (value: boolean) => (this.yellowFilter = value),
+      color: ColorEnum.Yellow,
+    });
   }
 
   private createLimitCardFilter(
@@ -84,45 +112,48 @@ export class Filter extends Phaser.GameObjects.Container {
     blueFilter: number,
     yellowFilter: number
   ): number {
-    return this.createCheckbox(
-      650 + redFilter + blueFilter + yellowFilter,
-      520 + 30,
-      'Limite de 4',
-      () => null,
-      true,
-      true
-    );
+    return this.createCheckbox({
+      positionX: 650 + redFilter + blueFilter + yellowFilter,
+      positionY: 520 + 30,
+      text: 'Limite de 4',
+      checked: true,
+      readOnly: true,
+    });
   }
 
-  private createCheckbox(
-    positionX: number,
-    positionY: number,
-    text: string,
-    onChange: (value: boolean) => void,
-    readOnly?: boolean,
-    checked?: boolean
-  ): number {
-    const checkbox = this.scene.rexUI.add.checkbox(positionX, positionY, 40, 40, 0xffffff);
+  private createCheckbox(filter: FilterEnum): number {
+    const checkbox = this.scene.rexUI.add.checkbox(
+      filter.positionX,
+      filter.positionY,
+      40,
+      40,
+      0xffffff
+    );
     checkbox.setBoxFillStyle(0xffffff, 1);
     checkbox.setCheckerStyle(0x000000, 1);
     checkbox.setUncheckedBoxFillStyle(0xffffff, 1);
     checkbox.setBoxStrokeStyle(0, 0x000000, 1);
-    checkbox.setValue(checked ?? false);
-    if (readOnly) {
+    checkbox.setValue(filter.checked ?? false);
+    if (filter.readOnly) {
       checkbox.setReadOnly(true);
     }
     checkbox.on('valuechange', function (value: boolean) {
-      onChange(value);
-      console.log(`${text} filter: ${value}`);
+      if (filter.onChange) {
+        filter.onChange(value);
+      }
+      console.log(`${filter.text} filter: ${value}`);
+      if (filter.color) {
+        EventBus.emit('filter-card-color', filter.color, value);
+      }
     });
     const labelText = this.scene.add
-      .text(positionX, positionY, `    ${text}`, {
+      .text(filter.positionX, filter.positionY, `    ${filter.text}`, {
         fontSize: '25px',
         color: '#000000',
         fontFamily: 'LiberationSans',
       })
       .setOrigin(0, 0.5);
-    if (!readOnly) {
+    if (!filter.readOnly) {
       labelText.setInteractive({ useHandCursor: false }).on('pointerdown', () => {
         checkbox.setValue(!checkbox.checked);
       });
@@ -136,13 +167,16 @@ export class Filter extends Phaser.GameObjects.Container {
     yellowFilter: number,
     limitCard: number
   ): void {
-    this.inputSearchTerm = new InputText(this.scene);
+    this.inputSearchTerm = new InputText(this.scene, 'filterTerm');
     this.inputSearchTerm.placeholder = 'Pesquisar';
     this.inputSearchTerm.create();
     this.inputSearchTerm.changePosition(
       650 + redFilter + blueFilter + yellowFilter + limitCard + 100,
       520 + 30
     );
+    this.inputSearchTerm.onNameChanged((newName: string) => {
+      console.log('Name changed to:', newName);
+    });
   }
 
   private createCardCountText(

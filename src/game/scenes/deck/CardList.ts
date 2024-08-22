@@ -1,5 +1,7 @@
 import * as Phaser from 'phaser';
 import ScrollablePanel from 'phaser3-rex-plugins/templates/ui/scrollablepanel/ScrollablePanel';
+import { CardInterface } from '@/game/interfaces/card-interface';
+import { ColorEnum } from '@/game/enums/color-enum';
 import { EventBus } from '@/game/EventBus';
 import { getImageEnum, ImageEnum } from '@/game/enums/image-enum';
 import { useCardStore } from '@/stores/card-store';
@@ -12,10 +14,15 @@ export class CardList extends Phaser.GameObjects.Container {
   }
 
   private cardStore = useCardStore();
+  private cards: CardInterface[] = [];
+  private scrollablePanel: ScrollablePanel = <ScrollablePanel>{};
+  private colors: ColorEnum[] = [];
 
   public create(): void {
+    this.cards = this.cardStore.cards;
     this.createCardPanel();
     this.createCardList();
+    EventBus.on('filter-card-color', this.filterCardByColor, this);
   }
 
   private createCardPanel(): void {
@@ -30,7 +37,7 @@ export class CardList extends Phaser.GameObjects.Container {
     const COLOR_LIGHT = 0x7b5e57;
     const COLOR_DARK = 0x260e04;
     const scrollMode = 0;
-    const scrollablePanel = this.scene.rexUI.add
+    this.scrollablePanel = this.scene.rexUI.add
       .scrollablePanel({
         x: 640,
         y: 840,
@@ -63,11 +70,11 @@ export class CardList extends Phaser.GameObjects.Container {
       })
       .setOrigin(0, 0.5)
       .layout();
-    this.addCardPanelEventListeners(scrollablePanel);
+    this.addCardPanelEventListeners();
   }
 
-  private addCardPanelEventListeners(scrollablePanel: ScrollablePanel): void {
-    scrollablePanel
+  private addCardPanelEventListeners(): void {
+    this.scrollablePanel
       .setChildrenInteractive({})
       .on('child.over', function (child: Phaser.GameObjects.Image) {
         console.log(`Pointer Over ${child.getData('id')}\n`);
@@ -100,7 +107,7 @@ export class CardList extends Phaser.GameObjects.Container {
     });
     const width = 100;
     const height = 150;
-    for (const card of this.cardStore.cards) {
+    for (const card of this.cards) {
       sizer.add(
         this.scene.add
           .image(0, 0, getImageEnum(card.image))
@@ -110,5 +117,26 @@ export class CardList extends Phaser.GameObjects.Container {
       );
     }
     return sizer;
+  }
+
+  private filterCardByColor(color: ColorEnum, value: boolean): void {
+    if (value) {
+      if (!this.colors.includes(color)) {
+        this.colors.push(color);
+      }
+    } else {
+      this.colors = this.colors.filter(c => c !== color);
+    }
+    if (this.colors.length === 0) {
+      this.cards = this.cardStore.cards;
+    } else {
+      this.cards = this.cardStore.filterByColors(this.colors);
+    }
+    this.updateCardGrid();
+  }
+
+  private updateCardGrid(): void {
+    this.scrollablePanel.clear(true);
+    this.createCardList();
   }
 }
