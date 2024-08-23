@@ -219,7 +219,7 @@ export const dataCard: CardInterface[] = [
     image: 'ST02-001',
     descriptionPt: '',
     descriptionEn: '',
-    characterType: CharacterTypeEnum.Character,
+    characterType: CharacterTypeEnum.Leader,
     color: ColorEnum.Green,
   },
   {
@@ -372,7 +372,7 @@ export const dataCard: CardInterface[] = [
     image: 'ST03-001',
     descriptionPt: '',
     descriptionEn: '',
-    characterType: CharacterTypeEnum.Character,
+    characterType: CharacterTypeEnum.Leader,
     color: ColorEnum.Blue,
   },
   {
@@ -525,7 +525,7 @@ export const dataCard: CardInterface[] = [
     image: 'ST04-001',
     descriptionPt: '',
     descriptionEn: '',
-    characterType: CharacterTypeEnum.Character,
+    characterType: CharacterTypeEnum.Leader,
     color: ColorEnum.Purple,
   },
   {

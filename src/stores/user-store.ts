@@ -25,64 +25,105 @@ export const useUserStore = defineStore('user', () => {
   return { user, setUser, setData, getDeck };
 });
 
-const leaderCard = dataCard[0];
-const otherCards = dataCard.slice(1);
+// Deck Vermelho
+let leaderCard = dataCard[0];
+let otherCards = dataCard.slice(1);
 const redCards = otherCards.filter(card => card.color === ColorEnum.Red);
 let duplicatedRedCards: CardInterface[] = [];
 while (duplicatedRedCards.length < 50) {
   duplicatedRedCards = [...duplicatedRedCards, ...redCards];
 }
 duplicatedRedCards = duplicatedRedCards.slice(0, 50);
-const finalDeck = [leaderCard, ...duplicatedRedCards];
+const finalDeckRed = [leaderCard, ...duplicatedRedCards];
+
+// Deck Verde
+const leaderCardIndexGreen = 17;
+leaderCard = dataCard[leaderCardIndexGreen];
+otherCards = dataCard
+  .slice(0, leaderCardIndexGreen)
+  .concat(dataCard.slice(leaderCardIndexGreen + 1));
+const greenCards = otherCards.filter(card => card.color === ColorEnum.Green);
+let duplicatedGreenCards: CardInterface[] = [];
+while (duplicatedGreenCards.length < 50) {
+  duplicatedGreenCards = [...duplicatedGreenCards, ...greenCards];
+}
+duplicatedGreenCards = duplicatedGreenCards.slice(0, 50);
+const finalDeckGreen = [leaderCard, ...duplicatedGreenCards];
+
+// Deck Azul
+const leaderCardIndexBlue = 34;
+leaderCard = dataCard[leaderCardIndexBlue];
+otherCards = dataCard.slice(0, leaderCardIndexBlue).concat(dataCard.slice(leaderCardIndexBlue + 1));
+const blueCards = otherCards.filter(card => card.color === ColorEnum.Blue);
+let duplicatedBlueCards: CardInterface[] = [];
+while (duplicatedBlueCards.length < 50) {
+  duplicatedBlueCards = [...duplicatedBlueCards, ...blueCards];
+}
+duplicatedBlueCards = duplicatedBlueCards.slice(0, 50);
+const finalDeckBlue = [leaderCard, ...duplicatedBlueCards];
+
+// Deck Roxo
+const leaderCardIndexPurple = 51;
+leaderCard = dataCard[leaderCardIndexPurple];
+otherCards = dataCard
+  .slice(0, leaderCardIndexPurple)
+  .concat(dataCard.slice(leaderCardIndexPurple + 1));
+const purpleCards = otherCards.filter(card => card.color === ColorEnum.Purple);
+let duplicatedPurpleCards: CardInterface[] = [];
+while (duplicatedPurpleCards.length < 50) {
+  duplicatedPurpleCards = [...duplicatedPurpleCards, ...purpleCards];
+}
+duplicatedPurpleCards = duplicatedPurpleCards.slice(0, 50);
+const finalDeckPurple = [leaderCard, ...duplicatedPurpleCards];
 
 const decks: UserDeckInterface[] = [
   {
     id: 1,
-    name: 'Deck A',
+    name: 'Deck Vermelho',
     equipped: true,
-    cards: finalDeck,
+    cards: finalDeckRed,
   },
   {
     id: 2,
-    name: 'Deck B Colocar limite de cha',
+    name: 'Deck Verde',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckGreen,
   },
   {
     id: 3,
-    name: 'Deck C',
+    name: 'Deck Azul',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckBlue,
   },
   {
     id: 4,
-    name: 'Deck D',
+    name: 'Deck Roxo',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckPurple,
   },
   {
     id: 5,
-    name: 'Deck E',
+    name: 'Deck E Colocar limite de cha',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckRed,
   },
   {
     id: 6,
     name: 'Deck F',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckRed,
   },
   {
     id: 7,
     name: 'Deck G',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckRed,
   },
   {
     id: 8,
     name: 'Deck H',
     equipped: false,
-    cards: finalDeck,
+    cards: finalDeckRed,
   },
 ];
 
