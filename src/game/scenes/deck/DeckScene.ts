@@ -26,6 +26,7 @@ export class DeckScene extends Scene {
   private filter: Filter = <Filter>{};
   private userStore = useUserStore();
   private cardStore = useCardStore();
+  private deleteDeckButton: ButtonBeige = <ButtonBeige>{};
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.DeckBackground).setOrigin(0);
@@ -43,6 +44,7 @@ export class DeckScene extends Scene {
     this.createInfo();
     this.createBackButton();
     this.createClearDeckButton();
+    this.createDeleteDeckButton();
     this.deck = new Deck(this);
     this.filter = new Filter(this);
     new CardList(this);
@@ -145,6 +147,7 @@ export class DeckScene extends Scene {
   private changeDeckSelected(): void {
     console.log(this.deckSelected);
     if (this.deckSelected.id !== 0) {
+      this.deleteDeckButton.showButton('Excluir deck');
       this.inputName.text = this.deckSelected.name;
       this.inputName.updateName(this.deckSelected.name);
       const deck = this.userStore.getDeck(this.deckSelected.id);
@@ -247,5 +250,39 @@ export class DeckScene extends Scene {
     this.inputName.text = '';
     this.inputName.updateName(this.inputName.placeholder);
     this.deck.clearDeck();
+    this.resetDeleteDeckButton();
+    this.deleteDeckButton.hideButton();
+  }
+
+  private createDeleteDeckButton(): void {
+    const { height } = this.scale;
+    this.deleteDeckButton = new ButtonBeige(this);
+    this.deleteDeckButton.create({
+      positionX: 200 + 100,
+      positionY: height / 1.25,
+      text: 'Excluir deck',
+      scaleX: 1.4,
+      scaleY: 1.5,
+    });
+    this.resetDeleteDeckButton();
+    this.deleteDeckButton.hideButton();
+  }
+
+  private resetDeleteDeckButton(): void {
+    this.deleteDeckButton.onPointerDown(() => {
+      this.confirmDeleteDeck();
+    });
+  }
+
+  private confirmDeleteDeck(): void {
+    this.deleteDeckButton.changeText('Confirmar exclusão?');
+    this.deleteDeckButton.onPointerDown(() => {
+      this.deleteDeck();
+    });
+  }
+
+  private deleteDeck(): void {
+    this.deleteDeckButton.hideButton();
+    this.clearDeck();
   }
 }

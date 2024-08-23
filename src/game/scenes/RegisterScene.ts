@@ -1,3 +1,4 @@
+import * as Phaser from 'phaser';
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
@@ -15,6 +16,7 @@ export class RegisterScene extends Scene {
   private inputPassword: InputText = <InputText>{};
   private inputConfirmPassword: InputText = <InputText>{};
   private error: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
+  private loginButton: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
@@ -95,15 +97,17 @@ export class RegisterScene extends Scene {
     console.log(`Confirm password: ${this.inputConfirmPassword.text}`);
     this.error.setVisible(false);
     button.input!.enabled = false;
+    this.loginButton.disableInteractive();
     setTimeout(() => {
       this.error.setVisible(true);
       button.input!.enabled = true;
+      this.loginButton.setInteractive();
     }, 1500);
   }
 
   private createLoginButton(): void {
     const { width, height } = this.scale;
-    const button = this.add
+    this.loginButton = this.add
       .text(width / 2, height / 1.2, 'Fazer login', {
         fontFamily: 'LiberationSans',
         fontSize: '25px',
@@ -111,7 +115,7 @@ export class RegisterScene extends Scene {
       })
       .setOrigin(0.5, 0.5)
       .setInteractive({ useHandCursor: true });
-    button.on('pointerdown', () => {
+    this.loginButton.on('pointerdown', () => {
       this.scene.start(SceneEnum.Login);
     });
   }

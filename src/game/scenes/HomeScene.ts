@@ -1,3 +1,4 @@
+import * as Phaser from 'phaser';
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';

@@ -1,3 +1,4 @@
+import * as Phaser from 'phaser';
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
@@ -15,6 +16,7 @@ export class LoginScene extends Scene {
   private inputUsername: InputText = <InputText>{};
   private inputPassword: InputText = <InputText>{};
   private error: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
+  private registerButton: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
@@ -83,19 +85,25 @@ export class LoginScene extends Scene {
   private login(button: Phaser.GameObjects.Image): void {
     console.log(`Username: ${this.inputUsername.text}`);
     console.log(`Password: ${this.inputPassword.text}`);
-    this.scene.start(SceneEnum.Home);
-    // this.error.setVisible(false);
-    // button.input!.enabled = false;
-    // setTimeout(() => {
-    //   this.error.setVisible(true);
-    //   button.input!.enabled = true;
-    // }, 1500);
-    // this.loginAnimation();
+    const bypass = true;
+    if (bypass) {
+      this.scene.start(SceneEnum.Home);
+      return;
+    }
+    this.error.setVisible(false);
+    button.input!.enabled = false;
+    this.registerButton.disableInteractive();
+    setTimeout(() => {
+      this.error.setVisible(true);
+      button.input!.enabled = true;
+      this.registerButton.setInteractive();
+    }, 1500);
+    this.loginAnimation();
   }
 
   private createRegisterButton(): void {
     const { width, height } = this.scale;
-    const button = this.add
+    this.registerButton = this.add
       .text(width / 2, height / 1.2, 'Fazer cadastro', {
         fontFamily: 'LiberationSans',
         fontSize: '25px',
@@ -103,7 +111,7 @@ export class LoginScene extends Scene {
       })
       .setOrigin(0.5, 0.5)
       .setInteractive({ useHandCursor: true });
-    button.on('pointerdown', () => {
+    this.registerButton.on('pointerdown', () => {
       this.scene.start(SceneEnum.Register);
     });
   }
@@ -111,6 +119,7 @@ export class LoginScene extends Scene {
   private loginAnimation(): void {
     const onFadeOutComplete = () => {
       console.log('FadeOut animation complete');
+      this.cameras.main.fadeIn(0);
     };
     this.cameras.main.once('camerafadeoutcomplete', onFadeOutComplete);
     this.cameras.main.fadeOut(1000);

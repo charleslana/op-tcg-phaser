@@ -1,3 +1,4 @@
+import * as Phaser from 'phaser';
 import { ImageEnum } from '../enums/image-enum';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
