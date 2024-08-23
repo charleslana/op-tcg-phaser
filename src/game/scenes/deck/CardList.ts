@@ -27,6 +27,12 @@ export class CardList extends Phaser.GameObjects.Container {
     EventBus.on('filter-name', this.filterCardByTerm, this);
   }
 
+  public destroy(fromScene: boolean = false): void {
+    EventBus.off('filter-card-color', this.filterCardByColor, this);
+    EventBus.off('filter-name', this.filterCardByTerm, this);
+    super.destroy(fromScene);
+  }
+
   private createCardPanel(): void {
     const panel = this.scene.add.image(400, 400, ImageEnum.PanelBeige);
     panel.setOrigin(0, 0.5);

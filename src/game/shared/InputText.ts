@@ -42,6 +42,11 @@ export class InputText extends Phaser.GameObjects.Container {
     this.updateCursorPosition();
   }
 
+  public destroy(fromScene: boolean = false): void {
+    EventBus.off(this.eventName);
+    super.destroy(fromScene);
+  }
+
   public changePosition(x: number, y: number): void {
     this.updatePosition(x, y);
   }

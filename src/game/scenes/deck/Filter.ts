@@ -37,6 +37,11 @@ export class Filter extends Phaser.GameObjects.Container {
     EventBus.on('card-count-text', this.changeCountText, this);
   }
 
+  public destroy(fromScene: boolean = false): void {
+    EventBus.off('card-count-text', this.changeCountText, this);
+    super.destroy(fromScene);
+  }
+
   private createDeckFilter(): void {
     const redFilter = this.createRedFilter();
     const blueFilter = this.createBlueFilter(redFilter);
