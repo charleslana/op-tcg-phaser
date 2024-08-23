@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
 // Deck Vermelho
 let leaderCard = dataCard[0];
 let otherCards = dataCard.slice(1);
-const redCards = otherCards.filter(card => card.color === ColorEnum.Red);
+const redCards = otherCards.filter(card => card.color.includes(ColorEnum.Red));
 let duplicatedRedCards: CardInterface[] = [];
 while (duplicatedRedCards.length < 50) {
   duplicatedRedCards = [...duplicatedRedCards, ...redCards];
@@ -42,7 +42,7 @@ leaderCard = dataCard[leaderCardIndexGreen];
 otherCards = dataCard
   .slice(0, leaderCardIndexGreen)
   .concat(dataCard.slice(leaderCardIndexGreen + 1));
-const greenCards = otherCards.filter(card => card.color === ColorEnum.Green);
+const greenCards = otherCards.filter(card => card.color.includes(ColorEnum.Green));
 let duplicatedGreenCards: CardInterface[] = [];
 while (duplicatedGreenCards.length < 50) {
   duplicatedGreenCards = [...duplicatedGreenCards, ...greenCards];
@@ -54,7 +54,7 @@ const finalDeckGreen = [leaderCard, ...duplicatedGreenCards];
 const leaderCardIndexBlue = 34;
 leaderCard = dataCard[leaderCardIndexBlue];
 otherCards = dataCard.slice(0, leaderCardIndexBlue).concat(dataCard.slice(leaderCardIndexBlue + 1));
-const blueCards = otherCards.filter(card => card.color === ColorEnum.Blue);
+const blueCards = otherCards.filter(card => card.color.includes(ColorEnum.Blue));
 let duplicatedBlueCards: CardInterface[] = [];
 while (duplicatedBlueCards.length < 50) {
   duplicatedBlueCards = [...duplicatedBlueCards, ...blueCards];
@@ -68,7 +68,7 @@ leaderCard = dataCard[leaderCardIndexPurple];
 otherCards = dataCard
   .slice(0, leaderCardIndexPurple)
   .concat(dataCard.slice(leaderCardIndexPurple + 1));
-const purpleCards = otherCards.filter(card => card.color === ColorEnum.Purple);
+const purpleCards = otherCards.filter(card => card.color.includes(ColorEnum.Purple));
 let duplicatedPurpleCards: CardInterface[] = [];
 while (duplicatedPurpleCards.length < 50) {
   duplicatedPurpleCards = [...duplicatedPurpleCards, ...purpleCards];

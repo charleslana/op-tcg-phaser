@@ -8,7 +8,7 @@ export interface CardInterface {
   descriptionPt: string | null;
   descriptionEn: string | null;
   characterType: CharacterTypeEnum;
-  color: ColorEnum;
+  color: ColorEnum[];
   cost?: number;
   power?: number;
   counter?: number;

@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
 import ScrollablePanel from 'phaser3-rex-plugins/templates/ui/scrollablepanel/ScrollablePanel';
 import { CardInterface } from '@/game/interfaces/card-interface';
+import { CharacterTypeEnum } from '@/game/enums/character-type-enum';
+import { ColorEnum } from '@/game/enums/color-enum';
 import { EventBus } from '@/game/EventBus';
 import { getImageEnum, ImageEnum } from '@/game/enums/image-enum';
 
@@ -13,10 +15,18 @@ export class Deck extends Phaser.GameObjects.Container {
 
   private scrollablePanel: ScrollablePanel = <ScrollablePanel>{};
   private cards: CardInterface[] = [];
+  private hasLeader: boolean = false;
+  private leaderColors: ColorEnum[] = [];
 
   public create(): void {
     this.createDeckPanel();
     this.createDeck();
+    EventBus.on('deck-card-id', this.insertCard, this);
+  }
+
+  public destroy(fromScene: boolean = false): void {
+    EventBus.off('deck-card-id', this.insertCard, this);
+    super.destroy(fromScene);
   }
 
   public updateCards(cards: CardInterface[]): void {
@@ -27,6 +37,8 @@ export class Deck extends Phaser.GameObjects.Container {
 
   public clearDeck(): void {
     this.cards = [];
+    this.hasLeader = false;
+    this.leaderColors = [];
     this.scrollablePanel.clear(true);
   }
 
@@ -145,5 +157,38 @@ export class Deck extends Phaser.GameObjects.Container {
       sizer.add(cardGroup);
     }
     return sizer;
+  }
+
+  private insertCard(card?: CardInterface): void {
+    if (card) {
+      if (card.characterType === CharacterTypeEnum.Leader) {
+        if (this.hasLeader) {
+          console.log('Já existe um Líder no deck. Não é possível adicionar outro.');
+          return;
+        } else {
+          this.hasLeader = true;
+          this.leaderColors = card.color;
+        }
+      } else if (!this.hasLeader) {
+        console.log('É necessário ter um Líder no deck antes de adicionar outros cards.');
+        return;
+      } else if (this.hasLeader && !card.color.some(color => this.leaderColors.includes(color))) {
+        console.log('A carta deve ter pelo menos uma cor correspondente às cores do Líder.');
+        return;
+      }
+      const count = this.cards.filter(c => c.id === card.id).length;
+      if (count >= 4) {
+        console.log('Você já tem 4 cópias desta carta no deck.');
+        return;
+      }
+      if (this.cards.length >= 51) {
+        console.log('O deck pode conter no máximo 50 cartas além do Líder.');
+        return;
+      }
+      this.scrollablePanel.clear(true);
+      this.cards.push(card);
+      this.createDeck();
+      EventBus.emit('card-count-text', this.cards.length);
+    }
   }
 }

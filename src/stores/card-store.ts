@@ -13,7 +13,7 @@ export const useCardStore = defineStore('cards', () => {
     cards.value = dataCard;
   }
   function filterByColors(colors: ColorEnum[]): CardInterface[] {
-    return cards.value.filter(card => colors.includes(card.color));
+    return cards.value.filter(card => card.color.some(color => colors.includes(color)));
   }
   function searchByTerm(searchTerm: string, colors: ColorEnum[] = []): CardInterface[] {
     const lowerCaseTerm = searchTerm.toLowerCase();
@@ -40,7 +40,10 @@ export const useCardStore = defineStore('cards', () => {
       return filteredByColor.filter(card => card.cost === searchCost);
     }
   }
-  return { cards, setCards, setData, filterByColors, searchByTerm };
+  function getCardById(id: number): CardInterface | undefined {
+    return cards.value.find(card => card.id === id);
+  }
+  return { cards, setCards, setData, filterByColors, searchByTerm, getCardById };
 });
 
 export const dataCard: CardInterface[] = [
@@ -53,7 +56,7 @@ export const dataCard: CardInterface[] = [
     descriptionEn:
       '[Activate: Main] [Once Per Turn] Give this Leader or up to 1 of your Characters 1 rested DON!! card.',
     characterType: CharacterTypeEnum.Leader,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     power: 5000,
   },
   {
@@ -65,7 +68,7 @@ export const dataCard: CardInterface[] = [
     descriptionEn:
       '[DON!! X2] [When Attacking] Your opponent cannot activate a [Blocker] Character that has 5000 or more Power during this battle. [Trigger] Play this card.',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     cost: 2,
     power: 2000,
   },
@@ -76,7 +79,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     cost: 1,
     power: 3000,
     counter: 1000,
@@ -88,7 +91,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     cost: 2,
     power: 4000,
   },
@@ -99,7 +102,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     cost: 3,
     power: 5000,
   },
@@ -110,7 +113,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 7,
@@ -119,7 +122,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     counter: 1000,
   },
   {
@@ -129,7 +132,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 9,
@@ -138,7 +141,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 10,
@@ -147,7 +150,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 11,
@@ -156,7 +159,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 12,
@@ -165,7 +168,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 13,
@@ -174,7 +177,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: null,
     descriptionEn: null,
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 14,
@@ -183,7 +186,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Event,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
     counter: 3000,
   },
   {
@@ -193,7 +196,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Event,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 16,
@@ -202,7 +205,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Event,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 17,
@@ -211,7 +214,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Stage,
-    color: ColorEnum.Red,
+    color: [ColorEnum.Red],
   },
   {
     id: 18,
@@ -220,7 +223,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Leader,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 19,
@@ -229,7 +232,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 20,
@@ -238,7 +241,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 21,
@@ -247,7 +250,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 22,
@@ -256,7 +259,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 23,
@@ -265,7 +268,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 24,
@@ -274,7 +277,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 25,
@@ -283,7 +286,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 26,
@@ -292,7 +295,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 27,
@@ -301,7 +304,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 28,
@@ -310,7 +313,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 29,
@@ -319,7 +322,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 30,
@@ -328,7 +331,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 31,
@@ -337,7 +340,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 32,
@@ -346,7 +349,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 33,
@@ -355,7 +358,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 34,
@@ -364,7 +367,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Green,
+    color: [ColorEnum.Green],
   },
   {
     id: 35,
@@ -373,7 +376,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Leader,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 36,
@@ -382,7 +385,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 37,
@@ -391,7 +394,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 38,
@@ -400,7 +403,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 39,
@@ -409,7 +412,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 40,
@@ -418,7 +421,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 41,
@@ -427,7 +430,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 42,
@@ -436,7 +439,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 43,
@@ -445,7 +448,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 44,
@@ -454,7 +457,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 45,
@@ -463,7 +466,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 46,
@@ -472,7 +475,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 47,
@@ -481,7 +484,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 48,
@@ -490,7 +493,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 49,
@@ -499,7 +502,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 50,
@@ -508,7 +511,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 51,
@@ -517,7 +520,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Blue,
+    color: [ColorEnum.Blue],
   },
   {
     id: 52,
@@ -526,7 +529,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Leader,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 53,
@@ -535,7 +538,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 54,
@@ -544,7 +547,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 55,
@@ -553,7 +556,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 56,
@@ -562,7 +565,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 57,
@@ -571,7 +574,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 58,
@@ -580,7 +583,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 59,
@@ -589,7 +592,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 60,
@@ -598,7 +601,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 61,
@@ -607,7 +610,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 62,
@@ -616,7 +619,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 63,
@@ -625,7 +628,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 64,
@@ -634,7 +637,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 65,
@@ -643,7 +646,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 66,
@@ -652,7 +655,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 67,
@@ -661,7 +664,7 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
   {
     id: 68,
@@ -670,6 +673,6 @@ export const dataCard: CardInterface[] = [
     descriptionPt: '',
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
-    color: ColorEnum.Purple,
+    color: [ColorEnum.Purple],
   },
 ];
