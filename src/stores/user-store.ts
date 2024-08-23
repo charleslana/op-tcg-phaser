@@ -1,4 +1,5 @@
 import { CardInterface } from '@/game/interfaces/card-interface';
+import { CharacterTypeEnum } from '@/game/enums/character-type-enum';
 import { ColorEnum } from '@/game/enums/color-enum';
 import { dataCard } from './card-store';
 import { defineStore } from 'pinia';
@@ -25,56 +26,27 @@ export const useUserStore = defineStore('user', () => {
   return { user, setUser, setData, getDeck };
 });
 
-// Deck Vermelho
-let leaderCard = dataCard[0];
-let otherCards = dataCard.slice(1);
-const redCards = otherCards.filter(card => card.color.includes(ColorEnum.Red));
-let duplicatedRedCards: CardInterface[] = [];
-while (duplicatedRedCards.length < 50) {
-  duplicatedRedCards = [...duplicatedRedCards, ...redCards];
+function createDeckWithLeader(leaderIndex: number, color: ColorEnum): CardInterface[] {
+  const leaderCard = dataCard[leaderIndex];
+  if (leaderCard.characterType !== CharacterTypeEnum.Leader) {
+    throw new Error(`O card no índice ${leaderIndex} não é um líder.`);
+  }
+  const otherCards = dataCard.slice(0, leaderIndex).concat(dataCard.slice(leaderIndex + 1));
+  const filteredCards = otherCards.filter(
+    card => card.color.includes(color) && card.characterType !== CharacterTypeEnum.Leader
+  );
+  let duplicatedCards: CardInterface[] = [];
+  while (duplicatedCards.length < 50) {
+    duplicatedCards = [...duplicatedCards, ...filteredCards];
+  }
+  duplicatedCards = duplicatedCards.slice(0, 50);
+  return [leaderCard, ...duplicatedCards];
 }
-duplicatedRedCards = duplicatedRedCards.slice(0, 50);
-const finalDeckRed = [leaderCard, ...duplicatedRedCards];
 
-// Deck Verde
-const leaderCardIndexGreen = 17;
-leaderCard = dataCard[leaderCardIndexGreen];
-otherCards = dataCard
-  .slice(0, leaderCardIndexGreen)
-  .concat(dataCard.slice(leaderCardIndexGreen + 1));
-const greenCards = otherCards.filter(card => card.color.includes(ColorEnum.Green));
-let duplicatedGreenCards: CardInterface[] = [];
-while (duplicatedGreenCards.length < 50) {
-  duplicatedGreenCards = [...duplicatedGreenCards, ...greenCards];
-}
-duplicatedGreenCards = duplicatedGreenCards.slice(0, 50);
-const finalDeckGreen = [leaderCard, ...duplicatedGreenCards];
-
-// Deck Azul
-const leaderCardIndexBlue = 34;
-leaderCard = dataCard[leaderCardIndexBlue];
-otherCards = dataCard.slice(0, leaderCardIndexBlue).concat(dataCard.slice(leaderCardIndexBlue + 1));
-const blueCards = otherCards.filter(card => card.color.includes(ColorEnum.Blue));
-let duplicatedBlueCards: CardInterface[] = [];
-while (duplicatedBlueCards.length < 50) {
-  duplicatedBlueCards = [...duplicatedBlueCards, ...blueCards];
-}
-duplicatedBlueCards = duplicatedBlueCards.slice(0, 50);
-const finalDeckBlue = [leaderCard, ...duplicatedBlueCards];
-
-// Deck Roxo
-const leaderCardIndexPurple = 51;
-leaderCard = dataCard[leaderCardIndexPurple];
-otherCards = dataCard
-  .slice(0, leaderCardIndexPurple)
-  .concat(dataCard.slice(leaderCardIndexPurple + 1));
-const purpleCards = otherCards.filter(card => card.color.includes(ColorEnum.Purple));
-let duplicatedPurpleCards: CardInterface[] = [];
-while (duplicatedPurpleCards.length < 50) {
-  duplicatedPurpleCards = [...duplicatedPurpleCards, ...purpleCards];
-}
-duplicatedPurpleCards = duplicatedPurpleCards.slice(0, 50);
-const finalDeckPurple = [leaderCard, ...duplicatedPurpleCards];
+const finalDeckRed = createDeckWithLeader(0, ColorEnum.Red);
+const finalDeckGreen = createDeckWithLeader(17, ColorEnum.Green);
+const finalDeckBlue = createDeckWithLeader(34, ColorEnum.Blue);
+const finalDeckPurple = createDeckWithLeader(51, ColorEnum.Purple);
 
 const decks: UserDeckInterface[] = [
   {

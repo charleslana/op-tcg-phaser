@@ -18,6 +18,9 @@ export const useCardStore = defineStore('cards', () => {
   function searchByTerm(searchTerm: string, colors: ColorEnum[] = []): CardInterface[] {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filteredByColor = colors.length > 0 ? filterByColors(colors) : cards.value;
+    if (lowerCaseTerm === 'lider') {
+      return filteredByColor.filter(card => card.characterType === CharacterTypeEnum.Leader);
+    }
     const exactNameMatch = /^(\[.*\])$/.exec(searchTerm);
     if (exactNameMatch) {
       const nameInsideBrackets = searchTerm.slice(1, -1).toLowerCase();
@@ -674,5 +677,32 @@ export const dataCard: CardInterface[] = [
     descriptionEn: '',
     characterType: CharacterTypeEnum.Character,
     color: [ColorEnum.Purple],
+  },
+  {
+    id: 69,
+    name: '',
+    image: 'OP01-001',
+    descriptionPt: '',
+    descriptionEn: '',
+    characterType: CharacterTypeEnum.Leader,
+    color: [ColorEnum.Red],
+  },
+  {
+    id: 70,
+    name: '',
+    image: 'OP01-002',
+    descriptionPt: '',
+    descriptionEn: '',
+    characterType: CharacterTypeEnum.Leader,
+    color: [ColorEnum.Red, ColorEnum.Green],
+  },
+  {
+    id: 71,
+    name: '',
+    image: 'OP01-003',
+    descriptionPt: '',
+    descriptionEn: '',
+    characterType: CharacterTypeEnum.Leader,
+    color: [ColorEnum.Red, ColorEnum.Green],
   },
 ];

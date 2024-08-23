@@ -24,6 +24,7 @@ export class PreloaderScene extends Scene {
     this.load.image(ImageEnum.ButtonBeige, 'button-beige.png');
     this.load.image(ImageEnum.PanelBeige, 'panel-beige.png');
     this.load.image(ImageEnum.DonCard, 'Cards/Don/Don.png');
+    this.loadOPDeck1();
     this.loadStartDeck1();
     this.loadStartDeck2();
     this.loadStartDeck3();
@@ -79,6 +80,12 @@ export class PreloaderScene extends Scene {
     this.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => {
       progressIndicator.width = 4 + (barWidth - 8) * progress;
     });
+  }
+
+  private loadOPDeck1(): void {
+    this.load.image(ImageEnum.OP01_001_Card, 'Cards/OP01/OP01-001.png');
+    this.load.image(ImageEnum.OP01_002_Card, 'Cards/OP01/OP01-002.png');
+    this.load.image(ImageEnum.OP01_003_Card, 'Cards/OP01/OP01-003.png');
   }
 
   private loadStartDeck1(): void {

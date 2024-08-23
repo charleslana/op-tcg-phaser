@@ -153,6 +153,7 @@ export class DeckScene extends Scene {
       const deck = this.userStore.getDeck(this.deckSelected.id);
       if (deck) {
         this.deck.updateCards(deck.cards);
+        EventBus.emit('check-leader', deck.cards);
       }
       EventBus.emit('card-count-text', '51');
     }
@@ -174,7 +175,20 @@ export class DeckScene extends Scene {
       scaleX: 0.8,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.showToast('O deck foi salvo com sucesso.'));
+    buttonCreate.on('pointerdown', () => this.validateDeckCompleted());
+  }
+
+  private validateDeckCompleted(): void {
+    const deckName = this.inputName.text.trim();
+    if (deckName === '') {
+      this.showToast('Preencha o nome do deck.');
+      return;
+    }
+    if (this.deck.getCards().length !== 51) {
+      this.showToast('O deck deve conter 51 cartas para salvar.');
+      return;
+    }
+    this.showToast('O deck foi salvo com sucesso.');
   }
 
   private showToast(message: string): void {
