@@ -29,10 +29,12 @@ export class Filter extends Phaser.GameObjects.Container {
   private greenFilter = false;
   private purpleFilter = false;
   private yellowFilter = false;
+  private countText: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   public create(): void {
     this.createDeckFilter();
     this.createCountTotalCard();
+    EventBus.on('card-count-text', this.changeCountText, this);
   }
 
   private createDeckFilter(): void {
@@ -186,14 +188,14 @@ export class Filter extends Phaser.GameObjects.Container {
     yellowFilter: number,
     limitCard: number
   ): void {
-    const text = this.scene.add
-      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '51 / 51', {
+    this.countText = this.scene.add
+      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '0 / 51', {
         fontSize: '30px',
         color: '#000000',
         fontFamily: 'LiberationSans',
       })
       .setOrigin(0, 0.5);
-    text.setLetterSpacing(0);
+    this.countText.setLetterSpacing(0);
   }
 
   private createCountTotalCard(): void {
@@ -209,5 +211,9 @@ export class Filter extends Phaser.GameObjects.Container {
         fontFamily: 'LiberationSans',
       }
     );
+  }
+
+  private changeCountText(newText: string): void {
+    this.countText.setText(`${newText} / 51`);
   }
 }

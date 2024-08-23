@@ -154,6 +154,7 @@ export class DeckScene extends Scene {
       if (deck) {
         this.deck.updateCards(deck.cards);
       }
+      EventBus.emit('card-count-text', '51');
     }
   }
 
@@ -252,6 +253,7 @@ export class DeckScene extends Scene {
     this.deck.clearDeck();
     this.resetDeleteDeckButton();
     this.deleteDeckButton.hideButton();
+    EventBus.emit('card-count-text', '0');
   }
 
   private createDeleteDeckButton(): void {
