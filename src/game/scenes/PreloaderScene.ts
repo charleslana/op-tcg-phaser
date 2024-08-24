@@ -26,7 +26,7 @@ export class PreloaderScene extends Scene {
     this.load.image(ImageEnum.AudioOn, 'audio-on.png');
     this.load.image(ImageEnum.AudioOff, 'audio-off.png');
     this.load.image(ImageEnum.MusicOn, 'music-on.png');
-    this.load.image(ImageEnum.MusicOff, 'music-on.png');
+    this.load.image(ImageEnum.MusicOff, 'music-off.png');
     this.load.image(ImageEnum.DonCard, 'Cards/Don/Don.png');
     this.loadOPDeck1();
     this.loadStartDeck1();
