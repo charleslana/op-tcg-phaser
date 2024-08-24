@@ -20,6 +20,7 @@ export class HomeScene extends Scene {
     this.createMultiplayerButton();
     this.createLogoutButton();
     this.createDeckButton();
+    this.createAudioIcon();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -71,5 +72,27 @@ export class HomeScene extends Scene {
       scaleY: 1.5,
     });
     buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Deck));
+  }
+
+  private createAudioIcon(): void {
+    const { width } = this.scale;
+    const button = this.add.image(550, 400, ImageEnum.PanelBeige);
+    button.setScale(0.7, 0.7).setInteractive();
+    button.setPosition(width - 200, 200);
+    const icon = this.add.image(button.x, button.y, ImageEnum.AudioOn);
+    icon.setScale(1.2, 1.2);
+    icon.setOrigin(0.5, 0.5);
+    icon.setPosition(button.x, button.y);
+    button.on('pointerdown', () => {
+      this.toggleAudioIcon(icon);
+    });
+  }
+
+  private toggleAudioIcon(icon: Phaser.GameObjects.Image): void {
+    if (icon.texture.key === ImageEnum.AudioOn) {
+      icon.setTexture(ImageEnum.AudioOff);
+    } else {
+      icon.setTexture(ImageEnum.AudioOn);
+    }
   }
 }

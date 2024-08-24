@@ -18,6 +18,7 @@ export class CardList extends Phaser.GameObjects.Container {
   private scrollablePanel: ScrollablePanel = <ScrollablePanel>{};
   private colors: ColorEnum[] = [];
   private term: string = '';
+  private messageText: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
 
   public create(): void {
     this.cards = this.cardStore.cards;
@@ -39,6 +40,7 @@ export class CardList extends Phaser.GameObjects.Container {
     panel.setPosition(630, 840);
     panel.setAlpha(0.4);
     panel.setScale(12, 4.2);
+    this.showNoCardsFoundMessage(panel);
   }
 
   private createCardList(): void {
@@ -149,12 +151,29 @@ export class CardList extends Phaser.GameObjects.Container {
 
   private updateCardList(): void {
     this.scrollablePanel.clear(true);
-    this.createCardList();
+    if (this.cards.length === 0) {
+      this.messageText.setVisible(true);
+    } else {
+      this.messageText.setVisible(false);
+      this.createCardList();
+    }
   }
 
   private filterCardByTerm(term: string): void {
     this.term = term.trim();
     this.cards = this.cardStore.searchByTerm(term.trim(), this.colors);
     this.updateCardList();
+  }
+
+  private showNoCardsFoundMessage(panel: Phaser.GameObjects.Image): void {
+    this.messageText = this.scene.add.text(0, 0, 'Nenhuma carta encontrada com o filtro aplicado', {
+      fontSize: '32px',
+      color: '#000000',
+      fontFamily: 'LiberationSans',
+      fontStyle: 'normal',
+      align: 'center',
+    });
+    this.messageText.setOrigin(0.5, 0.5);
+    this.messageText.setPosition(panel.x + panel.displayWidth / 2, panel.y);
   }
 }

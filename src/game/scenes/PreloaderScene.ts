@@ -23,6 +23,10 @@ export class PreloaderScene extends Scene {
     this.load.image(ImageEnum.StoneButtonReady, 'stone-button-in-set-ready.png');
     this.load.image(ImageEnum.ButtonBeige, 'button-beige.png');
     this.load.image(ImageEnum.PanelBeige, 'panel-beige.png');
+    this.load.image(ImageEnum.AudioOn, 'audio-on.png');
+    this.load.image(ImageEnum.AudioOff, 'audio-off.png');
+    this.load.image(ImageEnum.MusicOn, 'music-on.png');
+    this.load.image(ImageEnum.MusicOff, 'music-on.png');
     this.load.image(ImageEnum.DonCard, 'Cards/Don/Don.png');
     this.loadOPDeck1();
     this.loadStartDeck1();
@@ -32,7 +36,7 @@ export class PreloaderScene extends Scene {
   }
 
   create() {
-    this.scene.start(SceneEnum.Deck);
+    this.scene.start(SceneEnum.Home);
   }
 
   private createBg(): void {
