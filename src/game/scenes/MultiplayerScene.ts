@@ -5,9 +5,9 @@ import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
 import { Version } from '../shared/Version';
 
-export class SettingScene extends Scene {
+export class MultiplayerScene extends Scene {
   constructor() {
-    super(SceneEnum.Setting);
+    super(SceneEnum.Multiplayer);
   }
 
   init() {
@@ -24,7 +24,7 @@ export class SettingScene extends Scene {
 
   private createText(): void {
     this.add
-      .text(0, 0, 'Configurações', {
+      .text(0, 0, 'Multijogador', {
         fontSize: '45px',
         color: '#000000',
         fontFamily: 'LiberationSans',

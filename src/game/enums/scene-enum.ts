@@ -6,4 +6,7 @@ export enum SceneEnum {
   Home = 'Home',
   Deck = 'Deck',
   Setting = 'Setting',
+  Credit = 'Credit',
+  HowToPlay = 'HowToPlay',
+  Multiplayer = 'Multiplayer',
 }

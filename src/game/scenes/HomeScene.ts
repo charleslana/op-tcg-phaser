@@ -41,7 +41,7 @@ export class HomeScene extends Scene {
       positionY: height / 3,
       text: 'Multijogador',
     });
-    buttonCreate.on('pointerdown', () => null);
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
   }
 
   private createLogoutButton(): void {
@@ -54,8 +54,12 @@ export class HomeScene extends Scene {
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Login));
+    buttonCreate.on('pointerdown', () => this.logout());
     this.createUserNameText(buttonCreate);
+  }
+
+  private logout(): void {
+    this.scene.start(SceneEnum.Login);
   }
 
   private createUserNameText(buttonImage: Phaser.GameObjects.Image): void {
@@ -159,7 +163,7 @@ export class HomeScene extends Scene {
       scaleX: 1,
       scaleY: 1.7,
     });
-    buttonCreate.on('pointerdown', () => null);
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Credit));
   }
 
   private createHowToPlayButton(): void {
@@ -172,6 +176,6 @@ export class HomeScene extends Scene {
       scaleX: 1.3,
       scaleY: 1.7,
     });
-    buttonCreate.on('pointerdown', () => null);
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.HowToPlay));
   }
 }
