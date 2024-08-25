@@ -4,12 +4,15 @@ import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
+import { useSettingsStore } from '@/stores/settings-store';
 import { Version } from '../shared/Version';
 
 export class HomeScene extends Scene {
   constructor() {
     super(SceneEnum.Home);
   }
+
+  private settingsStore = useSettingsStore();
 
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
@@ -20,11 +23,12 @@ export class HomeScene extends Scene {
     this.createMultiplayerButton();
     this.createLogoutButton();
     this.createDeckButton();
+    this.validateAudioMusicIcon();
     this.createAudioIcon();
     this.createMusicIcon();
     this.createSettingsButton();
     this.createCreditsButton();
-    this.createHelpButton();
+    this.createHowToPlayButton();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -78,12 +82,17 @@ export class HomeScene extends Scene {
     buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Deck));
   }
 
+  private validateAudioMusicIcon(): void {
+    this.settingsStore.initializeSettings();
+  }
+
   private createAudioIcon(): void {
     const { width } = this.scale;
     const button = this.add.image(550, 400, ImageEnum.PanelBeige);
     button.setScale(0.7, 0.7).setInteractive();
     button.setPosition(width - 200, 200);
-    const icon = this.add.image(button.x, button.y, ImageEnum.AudioOn);
+    const image = this.settingsStore.audio ? ImageEnum.AudioOn : ImageEnum.AudioOff;
+    const icon = this.add.image(button.x, button.y, image);
     icon.setScale(1.2, 1.2);
     icon.setOrigin(0.5, 0.5);
     icon.setPosition(button.x, button.y);
@@ -95,8 +104,10 @@ export class HomeScene extends Scene {
   private toggleAudioIcon(icon: Phaser.GameObjects.Image): void {
     if (icon.texture.key === ImageEnum.AudioOn) {
       icon.setTexture(ImageEnum.AudioOff);
+      this.settingsStore.setAudio(false);
     } else {
       icon.setTexture(ImageEnum.AudioOn);
+      this.settingsStore.setAudio(true);
     }
   }
 
@@ -105,7 +116,8 @@ export class HomeScene extends Scene {
     const button = this.add.image(550, 400, ImageEnum.PanelBeige);
     button.setScale(0.7, 0.7).setInteractive();
     button.setPosition(width - 200, 300);
-    const icon = this.add.image(button.x, button.y, ImageEnum.MusicOn);
+    const image = this.settingsStore.music ? ImageEnum.MusicOn : ImageEnum.MusicOff;
+    const icon = this.add.image(button.x, button.y, image);
     icon.setScale(1.2, 1.2);
     icon.setOrigin(0.5, 0.5);
     icon.setPosition(button.x, button.y);
@@ -117,8 +129,10 @@ export class HomeScene extends Scene {
   private toggleMusicIcon(icon: Phaser.GameObjects.Image): void {
     if (icon.texture.key === ImageEnum.MusicOn) {
       icon.setTexture(ImageEnum.MusicOff);
+      this.settingsStore.setMusic(false);
     } else {
       icon.setTexture(ImageEnum.MusicOn);
+      this.settingsStore.setMusic(true);
     }
   }
 
@@ -132,7 +146,7 @@ export class HomeScene extends Scene {
       scaleX: 1.5,
       scaleY: 1.7,
     });
-    buttonCreate.on('pointerdown', () => null);
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Setting));
   }
 
   private createCreditsButton(): void {
@@ -148,14 +162,14 @@ export class HomeScene extends Scene {
     buttonCreate.on('pointerdown', () => null);
   }
 
-  private createHelpButton(): void {
+  private createHowToPlayButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: 200,
       positionY: height / 1.3,
-      text: 'Ajuda',
-      scaleX: 1,
+      text: 'Como jogar',
+      scaleX: 1.3,
       scaleY: 1.7,
     });
     buttonCreate.on('pointerdown', () => null);

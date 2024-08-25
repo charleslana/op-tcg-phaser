@@ -6,6 +6,7 @@ import { HomeScene } from './scenes/HomeScene';
 import { LoginScene } from './scenes/LoginScene';
 import { PreloaderScene } from './scenes/PreloaderScene';
 import { RegisterScene } from './scenes/RegisterScene';
+import { SettingScene } from './scenes/SettingScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
@@ -27,7 +28,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   parent: 'game-container',
   backgroundColor: '#ffffff',
-  scene: [BootScene, PreloaderScene, LoginScene, RegisterScene, HomeScene, DeckScene],
+  scene: [BootScene, PreloaderScene, LoginScene, RegisterScene, HomeScene, DeckScene, SettingScene],
   plugins: {
     scene: [
       {
