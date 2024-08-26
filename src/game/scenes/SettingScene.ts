@@ -56,6 +56,7 @@ export class SettingScene extends Scene {
   private createInputPlayerName(): void {
     const { width } = this.scale;
     this.inputPlayerName = new InputText(this);
+    this.inputPlayerName.placeholder = '';
     this.inputPlayerName.create();
     this.inputPlayerName.updateName('Jogador00001');
     this.inputPlayerName.text = 'Jogador00001';
