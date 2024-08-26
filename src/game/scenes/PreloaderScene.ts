@@ -33,7 +33,7 @@ export class PreloaderScene extends Scene {
   }
 
   create() {
-    this.scene.start(SceneEnum.Setting);
+    this.scene.start(SceneEnum.Password);
   }
 
   private createBg(): void {

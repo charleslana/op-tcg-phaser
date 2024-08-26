@@ -108,6 +108,7 @@ export class HomeScene extends Scene {
     button.on('pointerdown', () => {
       this.toggleAudioIcon(icon);
     });
+    this.createOverlayButton(button);
   }
 
   private toggleAudioIcon(icon: Phaser.GameObjects.Image): void {
@@ -133,6 +134,7 @@ export class HomeScene extends Scene {
     button.on('pointerdown', () => {
       this.toggleMusicIcon(icon);
     });
+    this.createOverlayButton(button);
   }
 
   private toggleMusicIcon(icon: Phaser.GameObjects.Image): void {
@@ -143,6 +145,21 @@ export class HomeScene extends Scene {
       icon.setTexture(ImageEnum.MusicOn);
       this.settingsStore.setMusic(true);
     }
+  }
+
+  private createOverlayButton(button: Phaser.GameObjects.Image): void {
+    const hoverOverlay = this.add
+      .image(550, 400, ImageEnum.PanelBeige)
+      .setAlpha(0)
+      .setScale(button.scaleX, button.scaleY)
+      .setPosition(button.x, button.y);
+    hoverOverlay.setTint(0x000000);
+    button.on('pointerover', () => {
+      hoverOverlay.setAlpha(0.4);
+    });
+    button.on('pointerout', () => {
+      hoverOverlay.setAlpha(0);
+    });
   }
 
   private createSettingsButton(): void {

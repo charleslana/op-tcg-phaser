@@ -9,4 +9,5 @@ export enum SceneEnum {
   Credit = 'Credit',
   HowToPlay = 'HowToPlay',
   Multiplayer = 'Multiplayer',
+  Password = 'Password',
 }

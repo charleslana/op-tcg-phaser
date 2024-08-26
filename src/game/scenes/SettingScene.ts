@@ -173,7 +173,7 @@ export class SettingScene extends Scene {
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.save());
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Password));
   }
 
   private createBackButton(): void {
