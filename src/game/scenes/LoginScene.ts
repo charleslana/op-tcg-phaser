@@ -45,7 +45,7 @@ export class LoginScene extends Scene {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 5, 'Faça login para entrar', {
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         fontSize: '25px',
         color: '#000000',
       })
@@ -105,7 +105,7 @@ export class LoginScene extends Scene {
     const { width, height } = this.scale;
     this.registerButton = this.add
       .text(width / 2, height / 1.2, 'Fazer cadastro', {
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         fontSize: '25px',
         color: '#000000',
       })
@@ -134,7 +134,7 @@ export class LoginScene extends Scene {
     const { width, height } = this.scale;
     this.error = this.add
       .text(width / 2, height / 1.6, 'Erro desconhecido encontrado.', {
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         fontSize: '18px',
         color: '#000000',
       })

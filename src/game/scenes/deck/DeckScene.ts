@@ -82,7 +82,7 @@ export class DeckScene extends Scene {
         text: {
           fontSize: 23,
           fixedWidth: 300,
-          fontFamily: 'LiberationSans',
+          fontFamily: 'AlineaSans',
           color: 0xf000000,
         },
         height: 20,
@@ -100,7 +100,7 @@ export class DeckScene extends Scene {
         text: {
           fontSize: 23,
           fixedWidth: 280,
-          fontFamily: 'LiberationSans',
+          fontFamily: 'AlineaSans',
           color: 0xfffffff,
         },
       },
@@ -199,7 +199,7 @@ export class DeckScene extends Scene {
         background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x4e342e),
         text: this.add.text(0, 0, '', {
           fontSize: '24px',
-          fontFamily: 'LiberationSans',
+          fontFamily: 'AlineaSans',
         }),
         space: {
           left: 20,
@@ -223,7 +223,7 @@ export class DeckScene extends Scene {
       `,
       {
         fontSize: '20px',
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         color: '#000000',
         wordWrap: { width: 500 },
         align: 'left',

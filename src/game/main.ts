@@ -3,6 +3,7 @@ import { AUTO, Game } from 'phaser';
 import { BootScene } from './scenes/BootScene';
 import { CreditScene } from './scenes/CreditScene';
 import { DeckScene } from './scenes/deck/DeckScene';
+import { FontPlugin } from 'phaser-font-plugin';
 import { HomeScene } from './scenes/HomeScene';
 import { HowToPlayScene } from './scenes/HowToPlayScene';
 import { LoginScene } from './scenes/LoginScene';
@@ -44,6 +45,13 @@ const config: Phaser.Types.Core.GameConfig = {
     MultiplayerScene,
   ],
   plugins: {
+    global: [
+      {
+        key: 'FontPlugin',
+        plugin: FontPlugin,
+        start: true,
+      },
+    ],
     scene: [
       {
         key: 'rexUI',

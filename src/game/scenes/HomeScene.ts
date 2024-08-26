@@ -65,11 +65,16 @@ export class HomeScene extends Scene {
   private createUserNameText(buttonImage: Phaser.GameObjects.Image): void {
     const distance = 20;
     this.add
-      .text(buttonImage.x - buttonImage.displayWidth / 2 - distance, buttonImage.y, 'Jogador0001', {
-        fontSize: '45px',
-        color: '#000000',
-        fontFamily: 'LiberationSans',
-      })
+      .text(
+        buttonImage.x - buttonImage.displayWidth / 2 - distance,
+        buttonImage.y,
+        'Jogador00001',
+        {
+          fontSize: '45px',
+          color: '#000000',
+          fontFamily: 'AlineaSans',
+        }
+      )
       .setOrigin(1, 0.5);
   }
 

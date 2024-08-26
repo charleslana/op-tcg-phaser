@@ -11,6 +11,7 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
   private button: Phaser.GameObjects.Image = <Phaser.GameObjects.Image>{};
   private buttonText: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
   private onPointerDownCallback?: () => void;
+  private hoverOverlay: Phaser.GameObjects.Image = <Phaser.GameObjects.Image>{};
 
   public create(buttonBeige: ButtonBeigeInterface): Phaser.GameObjects.Image {
     this.button = this.scene.add.image(550, 400, ImageEnum.ButtonBeige);
@@ -20,7 +21,7 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
       this.button.setScale(buttonBeige.scaleX, buttonBeige.scaleY).setInteractive();
     }
     this.button.setPosition(buttonBeige.positionX, buttonBeige.positionY);
-    const buttonTextConfig = { fontFamily: 'LiberationSans', fontSize: '45px', fill: '#000000' };
+    const buttonTextConfig = { fontFamily: 'AlineaSans', fontSize: '45px', fill: '#000000' };
     this.buttonText = this.scene.add.text(470, 387, buttonBeige.text, buttonTextConfig);
     this.buttonText.setOrigin(0.5, 0.5);
     this.buttonText.setPosition(this.button.x, this.button.y);
@@ -30,12 +31,29 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
         this.onPointerDownCallback();
       }
     });
+    this.createOverlayButton();
     return this.button;
+  }
+
+  public createOverlayButton(): void {
+    this.hoverOverlay = this.scene.add
+      .image(550, 400, ImageEnum.ButtonBeige)
+      .setAlpha(0)
+      .setScale(this.button.scaleX, this.button.scaleY)
+      .setPosition(this.button.x, this.button.y);
+    this.hoverOverlay.setTint(0x000000);
+    this.button.on('pointerover', () => {
+      this.hoverOverlay.setAlpha(0.4);
+    });
+    this.button.on('pointerout', () => {
+      this.hoverOverlay.setAlpha(0);
+    });
   }
 
   public hideButton(): void {
     this.button.setVisible(false);
     this.buttonText.setVisible(false);
+    this.hoverOverlay.setVisible(false);
   }
 
   public showButton(text?: string): void {
@@ -45,6 +63,7 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
     }
     this.button.setVisible(true);
     this.buttonText.setVisible(true);
+    this.hoverOverlay.setVisible(true);
   }
 
   public changeText(newText: string): void {

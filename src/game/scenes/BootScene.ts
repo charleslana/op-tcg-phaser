@@ -9,6 +9,7 @@ export class BootScene extends Scene {
 
   preload() {
     this.load.image(ImageEnum.Background, 'assets/images/background.jpg');
+    this.load.font('AlineaSans', 'assets/fonts/AlineaSansW01Regular.ttf');
   }
 
   create() {

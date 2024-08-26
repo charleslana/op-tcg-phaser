@@ -27,7 +27,7 @@ export class CreditScene extends Scene {
       .text(0, 0, 'Créditos', {
         fontSize: '45px',
         color: '#000000',
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
       })
       .setOrigin(0);
   }

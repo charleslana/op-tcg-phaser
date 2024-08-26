@@ -67,7 +67,7 @@ export class FloatingCard extends Phaser.GameObjects.Container {
         {
           fontSize: '20px',
           color: '#000000',
-          fontFamily: 'LiberationSans',
+          fontFamily: 'AlineaSans',
           align: 'center',
           wordWrap: { width: width - 20 },
           fixedWidth: width - 20,

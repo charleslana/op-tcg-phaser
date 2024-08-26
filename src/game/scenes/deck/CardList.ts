@@ -169,7 +169,7 @@ export class CardList extends Phaser.GameObjects.Container {
     this.messageText = this.scene.add.text(0, 0, 'Nenhuma carta encontrada com o filtro aplicado', {
       fontSize: '32px',
       color: '#000000',
-      fontFamily: 'LiberationSans',
+      fontFamily: 'AlineaSans',
       fontStyle: 'normal',
       align: 'center',
     });

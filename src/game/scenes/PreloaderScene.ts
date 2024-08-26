@@ -18,9 +18,6 @@ export class PreloaderScene extends Scene {
   preload() {
     this.load.setPath('assets/images');
     this.load.image(ImageEnum.DeckBackground, 'deck-background.jpg');
-    this.load.image(ImageEnum.StoneButtonFrame, 'stone-button-frame.png');
-    this.load.image(ImageEnum.StoneButtonHovered, 'stone-button-in-set-hovered.png');
-    this.load.image(ImageEnum.StoneButtonReady, 'stone-button-in-set-ready.png');
     this.load.image(ImageEnum.ButtonBeige, 'button-beige.png');
     this.load.image(ImageEnum.PanelBeige, 'panel-beige.png');
     this.load.image(ImageEnum.AudioOn, 'audio-on.png');
@@ -48,7 +45,7 @@ export class PreloaderScene extends Scene {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 4, 'ONE PIECE TCG(Trading Card Game)\nSimulador', {
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         fontSize: '48px',
         color: '#000000',
         fontStyle: 'bold',
@@ -60,7 +57,7 @@ export class PreloaderScene extends Scene {
     const { width, height } = this.scale;
     this.add
       .text(width / 2, height / 2 + 130, 'Carregando...', {
-        fontFamily: 'LiberationSans',
+        fontFamily: 'AlineaSans',
         fontSize: '24px',
         color: '#000000',
       })
