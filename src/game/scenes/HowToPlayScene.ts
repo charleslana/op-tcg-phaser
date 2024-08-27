@@ -64,7 +64,6 @@ export class HowToPlayScene extends Scene {
           right: 10,
           top: 10,
           bottom: 10,
-
           panel: 10,
         },
       })
