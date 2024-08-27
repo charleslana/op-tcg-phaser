@@ -1,8 +1,10 @@
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
+import { InputText } from '../shared/InputText';
 import { Scene } from 'phaser';
 import { SceneEnum } from '../enums/scene-enum';
+import { Toast } from '../shared/Toast';
 import { Version } from '../shared/Version';
 
 export class PasswordScene extends Scene {
@@ -10,26 +12,112 @@ export class PasswordScene extends Scene {
     super(SceneEnum.Password);
   }
 
+  private offsetX = 200;
+  private inputCurrentPassword: InputText = <InputText>{};
+  private inputNewPassword: InputText = <InputText>{};
+  private inputConfirmPassword: InputText = <InputText>{};
+  private toast: Toast = <Toast>{};
+
   init() {
     const backgroundImage = this.add.image(0, 0, ImageEnum.Background).setOrigin(0);
     backgroundImage.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
   }
 
   create() {
-    this.createText();
+    this.toast = new Toast(this);
+    this.createCurrentPasswordText();
+    this.createInputCurrentPassword();
+    this.createNewPasswordText();
+    this.createInputNewPassword();
+    this.createConfirmPasswordText();
+    this.createInputConfirmPassword();
+    this.createUpdateButton();
     this.createBackButton();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
 
-  private createText(): void {
+  update() {
+    this.inputCurrentPassword.update();
+    this.inputNewPassword.update();
+    this.inputConfirmPassword.update();
+  }
+
+  private createCurrentPasswordText(): void {
+    const { width } = this.scale;
     this.add
-      .text(0, 0, 'Senha', {
-        fontSize: '45px',
+      .text(width / 2, 50 + this.offsetX, 'Senha atual', {
+        fontSize: '20px',
         color: '#000000',
         fontFamily: 'AlineaSans',
       })
-      .setOrigin(0);
+      .setOrigin(0.5);
+  }
+
+  private createInputCurrentPassword(): void {
+    const { width } = this.scale;
+    this.inputCurrentPassword = new InputText(this);
+    this.inputCurrentPassword.placeholder = '';
+    this.inputCurrentPassword.create();
+    this.inputCurrentPassword.toggleVisibility();
+    this.inputCurrentPassword.changePosition(width / 2, 110 + this.offsetX);
+  }
+
+  private createNewPasswordText(): void {
+    const { width } = this.scale;
+    this.add
+      .text(width / 2, 180 + this.offsetX, 'Nova senha', {
+        fontSize: '20px',
+        color: '#000000',
+        fontFamily: 'AlineaSans',
+      })
+      .setOrigin(0.5);
+  }
+
+  private createInputNewPassword(): void {
+    const { width } = this.scale;
+    this.inputNewPassword = new InputText(this);
+    this.inputNewPassword.placeholder = '';
+    this.inputNewPassword.create();
+    this.inputNewPassword.toggleVisibility();
+    this.inputNewPassword.changePosition(width / 2, 240 + this.offsetX);
+  }
+
+  private createConfirmPasswordText(): void {
+    const { width } = this.scale;
+    this.add
+      .text(width / 2, 310 + this.offsetX, 'Confirmar senha', {
+        fontSize: '20px',
+        color: '#000000',
+        fontFamily: 'AlineaSans',
+      })
+      .setOrigin(0.5);
+  }
+
+  private createInputConfirmPassword(): void {
+    const { width } = this.scale;
+    this.inputConfirmPassword = new InputText(this);
+    this.inputConfirmPassword.placeholder = '';
+    this.inputConfirmPassword.create();
+    this.inputConfirmPassword.toggleVisibility();
+    this.inputConfirmPassword.changePosition(width / 2, 370 + this.offsetX);
+  }
+
+  private createUpdateButton(): void {
+    const { width } = this.scale;
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: width / 2,
+      positionY: 480 + this.offsetX,
+      text: 'Alterar',
+      scaleX: 0.7,
+      scaleY: 1.5,
+    });
+    buttonCreate.on('pointerdown', () => this.updatePassword());
+  }
+
+  private updatePassword(): void {
+    this.toast.show('A senha atual é inválida');
   }
 
   private createBackButton(): void {

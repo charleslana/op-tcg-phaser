@@ -5,6 +5,7 @@ import { CharacterTypeEnum } from '@/game/enums/character-type-enum';
 import { ColorEnum } from '@/game/enums/color-enum';
 import { EventBus } from '@/game/EventBus';
 import { getImageEnum, ImageEnum } from '@/game/enums/image-enum';
+import { Toast } from '@/game/shared/Toast';
 
 export class Deck extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -17,8 +18,10 @@ export class Deck extends Phaser.GameObjects.Container {
   private cards: CardInterface[] = [];
   private hasLeader: boolean = false;
   private leaderColors: ColorEnum[] = [];
+  private toast: Toast = <Toast>{};
 
   public create(): void {
+    this.toast = new Toast(this.scene);
     this.createDeckPanel();
     this.createDeck();
     EventBus.on('add-card-deck', this.insertCard, this);
@@ -269,7 +272,7 @@ export class Deck extends Phaser.GameObjects.Container {
   }
 
   private logError(message: string): void {
-    this.showToast(message);
+    this.toast.show(message);
     console.log(message);
   }
 
@@ -292,27 +295,6 @@ export class Deck extends Phaser.GameObjects.Container {
     } else {
       this.logError('Carta não encontrada no deck.');
     }
-  }
-
-  private showToast(message: string): void {
-    const { width, height } = this.scene.scale;
-    this.scene.rexUI.add
-      .toast({
-        x: width / 2,
-        y: height / 2,
-        background: this.scene.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x4e342e),
-        text: this.scene.add.text(0, 0, '', {
-          fontSize: '24px',
-          fontFamily: 'AlineaSans',
-        }),
-        space: {
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: 20,
-        },
-      })
-      .showMessage(message);
   }
 
   private checkLeader(cards: CardInterface[]): void {
