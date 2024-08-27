@@ -12,7 +12,7 @@ export class PasswordScene extends Scene {
     super(SceneEnum.Password);
   }
 
-  private offsetX = 200;
+  private offsetY = 200;
   private inputCurrentPassword: InputText = <InputText>{};
   private inputNewPassword: InputText = <InputText>{};
   private inputConfirmPassword: InputText = <InputText>{};
@@ -46,7 +46,7 @@ export class PasswordScene extends Scene {
   private createCurrentPasswordText(): void {
     const { width } = this.scale;
     this.add
-      .text(width / 2, 50 + this.offsetX, 'Senha atual', {
+      .text(width / 2, 50 + this.offsetY, 'Senha atual', {
         fontSize: '20px',
         color: '#000000',
         fontFamily: 'AlineaSans',
@@ -60,13 +60,13 @@ export class PasswordScene extends Scene {
     this.inputCurrentPassword.placeholder = '';
     this.inputCurrentPassword.create();
     this.inputCurrentPassword.toggleVisibility();
-    this.inputCurrentPassword.changePosition(width / 2, 110 + this.offsetX);
+    this.inputCurrentPassword.changePosition(width / 2, 110 + this.offsetY);
   }
 
   private createNewPasswordText(): void {
     const { width } = this.scale;
     this.add
-      .text(width / 2, 180 + this.offsetX, 'Nova senha', {
+      .text(width / 2, 180 + this.offsetY, 'Nova senha', {
         fontSize: '20px',
         color: '#000000',
         fontFamily: 'AlineaSans',
@@ -80,13 +80,13 @@ export class PasswordScene extends Scene {
     this.inputNewPassword.placeholder = '';
     this.inputNewPassword.create();
     this.inputNewPassword.toggleVisibility();
-    this.inputNewPassword.changePosition(width / 2, 240 + this.offsetX);
+    this.inputNewPassword.changePosition(width / 2, 240 + this.offsetY);
   }
 
   private createConfirmPasswordText(): void {
     const { width } = this.scale;
     this.add
-      .text(width / 2, 310 + this.offsetX, 'Confirmar senha', {
+      .text(width / 2, 310 + this.offsetY, 'Confirmar senha', {
         fontSize: '20px',
         color: '#000000',
         fontFamily: 'AlineaSans',
@@ -100,7 +100,7 @@ export class PasswordScene extends Scene {
     this.inputConfirmPassword.placeholder = '';
     this.inputConfirmPassword.create();
     this.inputConfirmPassword.toggleVisibility();
-    this.inputConfirmPassword.changePosition(width / 2, 370 + this.offsetX);
+    this.inputConfirmPassword.changePosition(width / 2, 370 + this.offsetY);
   }
 
   private createUpdateButton(): void {
@@ -108,7 +108,7 @@ export class PasswordScene extends Scene {
     const button = new ButtonBeige(this);
     const buttonCreate = button.create({
       positionX: width / 2,
-      positionY: 480 + this.offsetX,
+      positionY: 480 + this.offsetY,
       text: 'Alterar',
       scaleX: 0.7,
       scaleY: 1.5,
