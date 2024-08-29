@@ -16,20 +16,59 @@ export class MultiplayerScene extends Scene {
   }
 
   create() {
-    this.createText();
+    this.createLobbyButton();
+    this.createLobbyText();
+    this.createPrivateButton();
+    this.createPrivateText();
     this.createBackButton();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
 
-  private createText(): void {
+  private createLobbyButton(): void {
+    const { height } = this.scale;
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: 400,
+      positionY: height / 3,
+      text: 'Lobby',
+    });
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+  }
+
+  private createLobbyText(): void {
+    const { height } = this.scale;
     this.add
-      .text(0, 0, 'Multijogador', {
-        fontSize: '45px',
-        color: '#000000',
+      .text(400, height / 2.3, 'Entre aqui para jogar com lobbys públicos', {
         fontFamily: 'AlineaSans',
+        fontSize: '18px',
+        color: '#000000',
+        align: 'center',
       })
-      .setOrigin(0);
+      .setOrigin(0.5);
+  }
+
+  private createPrivateButton(): void {
+    const { width, height } = this.scale;
+    const button = new ButtonBeige(this);
+    const buttonCreate = button.create({
+      positionX: width - 400,
+      positionY: height / 3,
+      text: 'Privado',
+    });
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+  }
+
+  private createPrivateText(): void {
+    const { width, height } = this.scale;
+    this.add
+      .text(width - 400, height / 2.3, 'Crie seu lobby privado e envie o código\npara seu amigo', {
+        fontFamily: 'AlineaSans',
+        fontSize: '18px',
+        color: '#000000',
+        align: 'center',
+      })
+      .setOrigin(0.5);
   }
 
   private createBackButton(): void {
