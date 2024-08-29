@@ -64,7 +64,7 @@ export class CreditScene extends Scene {
     const lines = [
       'One Piece',
       'Inspirado em One Piece TCG Online Simulator por Batsu',
-      'Thierry Puyfoulhoux (Alinea Sans W01 Regular font)',
+      'onlinewebfonts (Alinea Sans W01 Regular font)',
       'Phaser3',
       'rexUI Plugins',
       'phaser-font-plugin',

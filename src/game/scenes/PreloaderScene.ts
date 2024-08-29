@@ -33,7 +33,7 @@ export class PreloaderScene extends Scene {
   }
 
   create() {
-    this.scene.start(SceneEnum.Multiplayer);
+    this.scene.start(SceneEnum.Lobby);
   }
 
   private createBg(): void {

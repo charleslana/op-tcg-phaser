@@ -6,10 +6,12 @@ import { DeckScene } from './scenes/deck/DeckScene';
 import { FontPlugin } from 'phaser-font-plugin';
 import { HomeScene } from './scenes/HomeScene';
 import { HowToPlayScene } from './scenes/HowToPlayScene';
+import { LobbyScene } from './scenes/LobbyScene';
 import { LoginScene } from './scenes/LoginScene';
 import { MultiplayerScene } from './scenes/MultiplayerScene';
 import { PasswordScene } from './scenes/PasswordScene';
 import { PreloaderScene } from './scenes/PreloaderScene';
+import { PrivateScene } from './scenes/PrivateScene';
 import { RegisterScene } from './scenes/RegisterScene';
 import { SettingScene } from './scenes/SettingScene';
 
@@ -45,6 +47,8 @@ const config: Phaser.Types.Core.GameConfig = {
     HowToPlayScene,
     MultiplayerScene,
     PasswordScene,
+    LobbyScene,
+    PrivateScene,
   ],
   plugins: {
     global: [

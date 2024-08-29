@@ -33,7 +33,7 @@ export class MultiplayerScene extends Scene {
       positionY: height / 3,
       text: 'Lobby',
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Lobby));
   }
 
   private createLobbyText(): void {
@@ -56,7 +56,7 @@ export class MultiplayerScene extends Scene {
       positionY: height / 3,
       text: 'Privado',
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Private));
   }
 
   private createPrivateText(): void {
