@@ -28,12 +28,14 @@ export class MultiplayerScene extends Scene {
   private createLobbyButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 400,
       positionY: height / 3,
       text: 'Lobby',
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Lobby));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Lobby);
+    });
   }
 
   private createLobbyText(): void {
@@ -51,12 +53,14 @@ export class MultiplayerScene extends Scene {
   private createPrivateButton(): void {
     const { width, height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: width - 400,
       positionY: height / 3,
       text: 'Privado',
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Private));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Private);
+    });
   }
 
   private createPrivateText(): void {
@@ -74,13 +78,15 @@ export class MultiplayerScene extends Scene {
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Home));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Home);
+    });
   }
 }

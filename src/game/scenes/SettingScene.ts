@@ -151,14 +151,16 @@ export class SettingScene extends Scene {
   private createSaveButton(): void {
     const { width, height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: width / 2,
       positionY: height / 1.2,
       text: 'Salvar',
       scaleX: 1,
       scaleY: 1.8,
     });
-    buttonCreate.on('pointerdown', () => this.save());
+    button.onPointerDown(() => {
+      this.save();
+    });
   }
 
   private save(): void {}
@@ -166,26 +168,30 @@ export class SettingScene extends Scene {
   private createUpdatePasswordButton(): void {
     const { width, height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: width - 300,
       positionY: height / 1.2,
       text: 'Alterar Senha',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Password));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Password);
+    });
   }
 
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Home));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Home);
+    });
   }
 }

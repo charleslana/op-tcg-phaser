@@ -1,4 +1,4 @@
-import { AudioOption } from '../shared/AudioOption';
+import { ButtonAudio } from '../shared/ButtonAudio';
 import { ButtonBeige } from '../shared/ButtonBeige';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
@@ -18,7 +18,7 @@ export class LobbyScene extends Scene {
 
   create() {
     this.createText();
-    new AudioOption(this);
+    new ButtonAudio(this);
     this.createBackButton();
     new Version(this);
     EventBus.emit('current-scene-ready', this);
@@ -38,13 +38,15 @@ export class LobbyScene extends Scene {
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Multiplayer);
+    });
   }
 }

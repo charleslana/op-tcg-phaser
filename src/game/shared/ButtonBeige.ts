@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
+import { AudioEnum } from '../enums/audio-enum';
 import { ButtonBeigeInterface } from '../interfaces/button-beige-interface';
 import { ImageEnum } from '../enums/image-enum';
+import { useSettingsStore } from '@/stores/settings-store';
 
 export class ButtonBeige extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
@@ -29,6 +31,10 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
     this.button.on('pointerdown', () => {
       if (this.onPointerDownCallback) {
         this.onPointerDownCallback();
+        const settingsStore = useSettingsStore();
+        if (settingsStore.audio) {
+          this.scene.sound.play(AudioEnum.Click);
+        }
       }
     });
     this.createOverlayButton();

@@ -106,14 +106,16 @@ export class PasswordScene extends Scene {
   private createUpdateButton(): void {
     const { width } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: width / 2,
       positionY: 480 + this.offsetY,
       text: 'Alterar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.updatePassword());
+    button.onPointerDown(() => {
+      this.updatePassword();
+    });
   }
 
   private updatePassword(): void {
@@ -123,13 +125,15 @@ export class PasswordScene extends Scene {
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Setting));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Setting);
+    });
   }
 }

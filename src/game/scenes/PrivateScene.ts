@@ -36,13 +36,15 @@ export class PrivateScene extends Scene {
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Multiplayer));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Multiplayer);
+    });
   }
 }

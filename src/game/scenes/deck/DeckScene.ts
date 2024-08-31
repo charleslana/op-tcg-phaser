@@ -134,14 +134,16 @@ export class DeckScene extends Scene {
 
   private createLoadDeckButton(): void {
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 200 + 270,
       positionY: 100,
       text: 'Carregar',
       scaleX: 1,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.changeDeckSelected());
+    button.onPointerDown(() => {
+      this.changeDeckSelected();
+    });
   }
 
   private changeDeckSelected(): void {
@@ -168,14 +170,16 @@ export class DeckScene extends Scene {
 
   private createSaveDeckButton(): void {
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 200 + 250,
       positionY: 200,
       text: 'Salvar',
       scaleX: 0.8,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.validateDeckCompleted());
+    button.onPointerDown(() => {
+      this.validateDeckCompleted();
+    });
   }
 
   private validateDeckCompleted(): void {
@@ -236,27 +240,31 @@ export class DeckScene extends Scene {
   private createBackButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
       scaleX: 0.7,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.scene.start(SceneEnum.Home));
+    button.onPointerDown(() => {
+      this.scene.start(SceneEnum.Home);
+    });
   }
 
   private createClearDeckButton(): void {
     const { height } = this.scale;
     const button = new ButtonBeige(this);
-    const buttonCreate = button.create({
+    button.create({
       positionX: 200 + 220,
       positionY: height / 1.1,
       text: 'Limpar deck',
       scaleX: 1.4,
       scaleY: 1.5,
     });
-    buttonCreate.on('pointerdown', () => this.clearDeck());
+    button.onPointerDown(() => {
+      this.clearDeck();
+    });
   }
 
   private clearDeck(): void {

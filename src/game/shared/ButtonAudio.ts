@@ -1,8 +1,9 @@
 import * as Phaser from 'phaser';
+import { AudioEnum } from '../enums/audio-enum';
 import { ImageEnum } from '../enums/image-enum';
 import { useSettingsStore } from '@/stores/settings-store';
 
-export class AudioOption extends Phaser.GameObjects.Container {
+export class ButtonAudio extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene) {
     super(scene);
     this.scene.add.existing(this);
@@ -33,6 +34,9 @@ export class AudioOption extends Phaser.GameObjects.Container {
     icon.setPosition(button.x, button.y);
     button.on('pointerdown', () => {
       this.toggleAudioIcon(icon);
+      if (this.settingsStore.audio) {
+        this.scene.sound.play(AudioEnum.Click);
+      }
     });
     this.createOverlayButton(button);
   }
@@ -59,6 +63,9 @@ export class AudioOption extends Phaser.GameObjects.Container {
     icon.setPosition(button.x, button.y);
     button.on('pointerdown', () => {
       this.toggleMusicIcon(icon);
+      if (this.settingsStore.audio) {
+        this.scene.sound.play(AudioEnum.Click);
+      }
     });
     this.createOverlayButton(button);
   }
@@ -66,10 +73,10 @@ export class AudioOption extends Phaser.GameObjects.Container {
   private toggleMusicIcon(icon: Phaser.GameObjects.Image): void {
     if (icon.texture.key === ImageEnum.MusicOn) {
       icon.setTexture(ImageEnum.MusicOff);
-      this.settingsStore.setMusic(false);
+      this.settingsStore.setMusic(false, this.scene);
     } else {
       icon.setTexture(ImageEnum.MusicOn);
-      this.settingsStore.setMusic(true);
+      this.settingsStore.setMusic(true, this.scene);
     }
   }
 
