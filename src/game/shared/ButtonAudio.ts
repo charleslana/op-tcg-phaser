@@ -12,7 +12,7 @@ export class ButtonAudio extends Phaser.GameObjects.Container {
 
   private settingsStore = useSettingsStore();
 
-  public create(): void {
+  private create(): void {
     this.validateAudioMusicIcon();
     this.createAudioIcon();
     this.createMusicIcon();

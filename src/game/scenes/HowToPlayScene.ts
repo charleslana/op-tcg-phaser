@@ -116,6 +116,7 @@ export class HowToPlayScene extends Scene {
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
+      key: 'back_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });

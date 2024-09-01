@@ -1,4 +1,5 @@
 import { ButtonBeige } from '../shared/ButtonBeige';
+import { ButtonLanguage } from '../shared/ButtonLanguage';
 import { Checkbox } from '../shared/Checkbox';
 import { CheckboxInterface } from '../interfaces/checkbox-interface';
 import { EventBus } from '../EventBus';
@@ -35,6 +36,7 @@ export class SettingScene extends Scene {
     this.createSaveButton();
     this.createUpdatePasswordButton();
     new Version(this);
+    new ButtonLanguage(this);
     EventBus.emit('current-scene-ready', this);
   }
 
@@ -155,6 +157,7 @@ export class SettingScene extends Scene {
       positionX: width / 2,
       positionY: height / 1.2,
       text: 'Salvar',
+      key: 'save_button',
       scaleX: 1,
       scaleY: 1.8,
     });
@@ -172,6 +175,7 @@ export class SettingScene extends Scene {
       positionX: width - 300,
       positionY: height / 1.2,
       text: 'Alterar Senha',
+      key: 'update_password_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });
@@ -187,6 +191,7 @@ export class SettingScene extends Scene {
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
+      key: 'back_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });

@@ -9,11 +9,13 @@ export const useSettingsStore = defineStore('settings', () => {
   const audio = ref(getFromLocalStorage(audioKey, true));
   const music = ref(getFromLocalStorage(musicKey, true));
   const bgMusic = ref<Phaser.Sound.BaseSound | null>(null);
-  function getFromLocalStorage(key: string, defaultValue: boolean): boolean {
+  const languageKey = 'language';
+  const language = ref(getFromLocalStorage(languageKey, getBrowserLanguage()));
+  function getFromLocalStorage(key: string, defaultValue: unknown): unknown {
     const value = localStorage.getItem(key);
     return value !== null ? JSON.parse(value) : defaultValue;
   }
-  function saveToLocalStorage(key: string, value: boolean) {
+  function saveToLocalStorage(key: string, value: unknown) {
     localStorage.setItem(key, JSON.stringify(value));
   }
   function toggleAudio() {
@@ -54,9 +56,22 @@ export const useSettingsStore = defineStore('settings', () => {
       bgMusic.value = null;
     }
   }
+  function setLanguage(value: string) {
+    language.value = value;
+    saveToLocalStorage(languageKey, value);
+  }
+
+  function getBrowserLanguage(): string {
+    const lang = navigator.language;
+    return lang.startsWith('pt') ? 'pt' : 'en';
+  }
+  function setDefaultLanguage(scene: Phaser.Scene) {
+    scene.translation.changeLanguage(language.value as string);
+  }
   return {
     audio,
     music,
+    language,
     toggleAudio,
     toggleMusic,
     setAudio,
@@ -64,5 +79,7 @@ export const useSettingsStore = defineStore('settings', () => {
     playBackgroundMusic,
     stopBackgroundMusic,
     initializeSettings,
+    setLanguage,
+    setDefaultLanguage,
   };
 });

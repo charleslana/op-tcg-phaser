@@ -1,4 +1,5 @@
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import TextTranslationPlugin from 'phaser3-rex-plugins/plugins/texttranslation-plugin.js';
 import { AUTO, Game } from 'phaser';
 import { BootScene } from './scenes/BootScene';
 import { CreditScene } from './scenes/CreditScene';
@@ -63,6 +64,12 @@ const config: Phaser.Types.Core.GameConfig = {
         key: 'rexUI',
         plugin: RexUIPlugin,
         mapping: 'rexUI',
+      },
+      {
+        key: 'rexTextTranslation',
+        plugin: TextTranslationPlugin,
+        start: true,
+        mapping: 'translation',
       },
     ],
   },

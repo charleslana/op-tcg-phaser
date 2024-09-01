@@ -84,7 +84,6 @@ export class CardList extends Phaser.GameObjects.Container {
   }
 
   private addCardPanelEventListeners(): void {
-    const self = this;
     this.scrollablePanel
       .setChildrenInteractive({})
       .on('child.over', function (child: Phaser.GameObjects.Image) {
@@ -97,9 +96,9 @@ export class CardList extends Phaser.GameObjects.Container {
         console.log(`Pointer Out ${child.getData('id')}\n`);
         EventBus.emit('set-visible-card', false);
       })
-      .on('child.click', function (child: Phaser.GameObjects.Image) {
+      .on('child.click', (child: Phaser.GameObjects.Image) => {
         console.log(`Click ${child.getData('id')}\n`);
-        const card = self.cardStore.getCardById(child.getData('id'));
+        const card = this.cardStore.getCardById(child.getData('id'));
         EventBus.emit('add-card-deck', card);
       })
       .on('child.pressstart', function (child: Phaser.GameObjects.Image) {

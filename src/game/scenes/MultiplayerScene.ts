@@ -32,6 +32,7 @@ export class MultiplayerScene extends Scene {
       positionX: 400,
       positionY: height / 3,
       text: 'Lobby',
+      key: 'lobby_button',
     });
     button.onPointerDown(() => {
       this.scene.start(SceneEnum.Lobby);
@@ -57,6 +58,7 @@ export class MultiplayerScene extends Scene {
       positionX: width - 400,
       positionY: height / 3,
       text: 'Privado',
+      key: 'private_lobby_button',
     });
     button.onPointerDown(() => {
       this.scene.start(SceneEnum.Private);
@@ -82,6 +84,7 @@ export class MultiplayerScene extends Scene {
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
+      key: 'back_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });

@@ -44,6 +44,7 @@ export class InputText extends Phaser.GameObjects.Container {
 
   public destroy(fromScene: boolean = false): void {
     EventBus.off(this.eventName);
+    this.scene.translation.i18next.off('languageChanged');
     super.destroy(fromScene);
   }
 
@@ -74,10 +75,19 @@ export class InputText extends Phaser.GameObjects.Container {
 
   private createNameText(): void {
     const nameTextConfig = { fontFamily: 'AlineaSans', fontSize: '23px', fill: '#000000' };
-    this.inputState.name = this.placeholder;
+    this.inputState.name = this.scene.translation.t(this.placeholder);
     this.inputState.nameText = this.scene.add
       .text(420, 315, this.inputState.name, nameTextConfig)
       .setDepth(21);
+    this.inputState.nameText.translation = this.scene.translation.add(this.inputState.nameText, {
+      translationKey: this.placeholder,
+    });
+    this.scene.translation.i18next.on('languageChanged', lng => {
+      console.log(`Change language to '${lng}'`);
+      if (!this.text) {
+        this.inputState.name = this.scene.translation.t(this.placeholder);
+      }
+    });
   }
 
   private createFrame(): void {
@@ -176,7 +186,7 @@ export class InputText extends Phaser.GameObjects.Container {
     gameObject.on('pointerup', () => {
       if (!this.inputState.isEnteringName) {
         this.inputState.isEnteringName = true;
-        if (this.inputState.name === this.placeholder) {
+        if (this.inputState.name === this.scene.translation.t(this.placeholder)) {
           this.inputState.name = '';
         }
         this.inputState.formCursor.setAlpha(0);
@@ -197,7 +207,7 @@ export class InputText extends Phaser.GameObjects.Container {
       if (this.inputState.isEnteringName) {
         let delayTime = 0;
         if (!this.inputState.name) {
-          this.inputState.name = this.placeholder;
+          this.inputState.name = this.scene.translation.t(this.placeholder);
           delayTime = 100;
         }
         this.scene.time.delayedCall(delayTime, () => {

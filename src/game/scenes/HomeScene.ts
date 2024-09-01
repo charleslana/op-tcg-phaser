@@ -40,6 +40,7 @@ export class HomeScene extends Scene {
       positionX: width / 2,
       positionY: height / 3,
       text: 'Multijogador',
+      key: 'multiplayer_button',
     });
     button.onPointerDown(() => {
       this.scene.start(SceneEnum.Multiplayer);
@@ -53,6 +54,7 @@ export class HomeScene extends Scene {
       positionX: width - 100,
       positionY: 50,
       text: 'Sair',
+      key: 'logout_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });
@@ -90,6 +92,7 @@ export class HomeScene extends Scene {
       positionX: 200,
       positionY: height / 1.8,
       text: 'Deck',
+      key: 'deck_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });
@@ -105,6 +108,7 @@ export class HomeScene extends Scene {
       positionX: width - 300,
       positionY: height / 1.8,
       text: 'Configurações',
+      key: 'settings_button',
       scaleX: 1.5,
       scaleY: 1.7,
     });
@@ -120,6 +124,7 @@ export class HomeScene extends Scene {
       positionX: width - 300,
       positionY: height / 1.3,
       text: 'Créditos',
+      key: 'credits_button',
       scaleX: 1,
       scaleY: 1.7,
     });
@@ -135,6 +140,7 @@ export class HomeScene extends Scene {
       positionX: 200,
       positionY: height / 1.3,
       text: 'Como jogar',
+      key: 'how_to_play_button',
       scaleX: 1.3,
       scaleY: 1.7,
     });

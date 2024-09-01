@@ -1,4 +1,6 @@
 export enum ImageEnum {
+  EnglishFlag = 'EnglishFlag',
+  BrazilFlag = 'BrazilFlag',
   Background = 'Background',
   DeckBackground = 'DeckBackground',
   ButtonBeige = 'ButtonBeige',

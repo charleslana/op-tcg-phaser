@@ -105,7 +105,6 @@ export class DeckScene extends Scene {
         },
       },
       list: {
-        //@ts-ignore
         maxHeight: 400,
         sliderAdaptThumbSize: true,
         mouseWheelScroller: {
@@ -117,17 +116,16 @@ export class DeckScene extends Scene {
   }
 
   private setupDropdownEvents(): void {
-    const self = this;
     this.dropDownList.on(
       'button.click',
-      function (
+      (
         dropDownList: SimpleDropDownList,
         _listPanel: SimpleDropDownList,
         button: SimpleDropDownList
-      ) {
+      ) => {
         dropDownList.setText('  ' + button.text);
-        self.deckSelected.id = button.value;
-        self.deckSelected.name = button.text;
+        this.deckSelected.id = button.value;
+        this.deckSelected.name = button.text;
       }
     );
   }
@@ -138,6 +136,7 @@ export class DeckScene extends Scene {
       positionX: 200 + 270,
       positionY: 100,
       text: 'Carregar',
+      key: 'load_button',
       scaleX: 1,
       scaleY: 1.5,
     });
@@ -149,7 +148,7 @@ export class DeckScene extends Scene {
   private changeDeckSelected(): void {
     console.log(this.deckSelected);
     if (this.deckSelected.id !== 0) {
-      this.deleteDeckButton.showButton('Excluir deck');
+      this.deleteDeckButton.showButton('delete_deck_button');
       this.inputName.text = this.deckSelected.name;
       this.inputName.updateName(this.deckSelected.name);
       const deck = this.userStore.getDeck(this.deckSelected.id);
@@ -174,6 +173,7 @@ export class DeckScene extends Scene {
       positionX: 200 + 250,
       positionY: 200,
       text: 'Salvar',
+      key: 'save_button',
       scaleX: 0.8,
       scaleY: 1.5,
     });
@@ -244,6 +244,7 @@ export class DeckScene extends Scene {
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
+      key: 'back_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });
@@ -259,6 +260,7 @@ export class DeckScene extends Scene {
       positionX: 200 + 220,
       positionY: height / 1.1,
       text: 'Limpar deck',
+      key: 'clear_deck_button',
       scaleX: 1.4,
       scaleY: 1.5,
     });
@@ -285,6 +287,7 @@ export class DeckScene extends Scene {
       positionX: 200 + 100,
       positionY: height / 1.25,
       text: 'Excluir deck',
+      key: 'delete_deck_button',
       scaleX: 1.4,
       scaleY: 1.5,
     });
@@ -299,7 +302,7 @@ export class DeckScene extends Scene {
   }
 
   private confirmDeleteDeck(): void {
-    this.deleteDeckButton.changeText('Confirmar exclusão?');
+    this.deleteDeckButton.changeText('confirm_delete_deck_button');
     this.deleteDeckButton.onPointerDown(() => {
       this.deleteDeck();
     });

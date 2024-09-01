@@ -7,7 +7,7 @@ export class Version extends Phaser.GameObjects.Container {
     this.create();
   }
 
-  public create(): void {
+  private create(): void {
     const { width, height } = this.scene.scale;
     this.scene.add
       .text(width - 10, height - 10, 'versão 1.0.0', {

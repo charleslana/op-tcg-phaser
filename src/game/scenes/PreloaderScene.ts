@@ -18,6 +18,8 @@ export class PreloaderScene extends Scene {
 
   preload() {
     this.load.setPath('assets');
+    this.load.image(ImageEnum.BrazilFlag, 'images/flag-brazil.png');
+    this.load.image(ImageEnum.EnglishFlag, 'images/flag-english.png');
     this.load.image(ImageEnum.DeckBackground, 'images/deck-background.jpg');
     this.load.image(ImageEnum.ButtonBeige, 'images/button-beige.png');
     this.load.image(ImageEnum.PanelBeige, 'images/panel-beige.png');
@@ -35,7 +37,7 @@ export class PreloaderScene extends Scene {
   }
 
   create() {
-    this.scene.start(SceneEnum.Lobby);
+    this.scene.start(SceneEnum.Login);
   }
 
   private createBg(): void {
@@ -45,7 +47,7 @@ export class PreloaderScene extends Scene {
 
   private createTitleText(): void {
     const { width, height } = this.scale;
-    this.add
+    const textObject = this.add
       .text(width / 2, height / 4, 'ONE PIECE TCG(Trading Card Game)\nSimulador', {
         fontFamily: 'AlineaSans',
         fontSize: '48px',
@@ -53,17 +55,25 @@ export class PreloaderScene extends Scene {
         fontStyle: 'bold',
       })
       .setOrigin(0.5);
+    textObject.translation = this.translation.add(textObject, {
+      translationKey: 'logo_name',
+      interpolation: ['ONE PIECE TCG(Trading Card Game'],
+    });
   }
 
   private createLoadingText(): void {
     const { width, height } = this.scale;
-    this.add
+    const textObject = this.add
       .text(width / 2, height / 2 + 130, 'Carregando...', {
         fontFamily: 'AlineaSans',
         fontSize: '24px',
         color: '#000000',
       })
       .setOrigin(0.5);
+    textObject.translation = this.translation.add(textObject, {
+      translationKey: 'loading',
+      interpolation: ['...'],
+    });
   }
 
   private createProgressBar(): void {

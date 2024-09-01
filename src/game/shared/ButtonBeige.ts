@@ -25,6 +25,9 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
     this.button.setPosition(buttonBeige.positionX, buttonBeige.positionY);
     const buttonTextConfig = { fontFamily: 'AlineaSans', fontSize: '45px', fill: '#000000' };
     this.buttonText = this.scene.add.text(470, 387, buttonBeige.text, buttonTextConfig);
+    this.buttonText.translation = this.scene.translation.add(this.buttonText, {
+      translationKey: buttonBeige.key ?? buttonBeige.text,
+    });
     this.buttonText.setOrigin(0.5, 0.5);
     this.buttonText.setPosition(this.button.x, this.button.y);
     this.adjustTextToButton();
@@ -37,8 +40,14 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
         }
       }
     });
+    this.onLanguageChanged();
     this.createOverlayButton();
     return this.button;
+  }
+
+  public destroy(fromScene: boolean = false): void {
+    this.scene.translation.i18next.off('languageChanged');
+    super.destroy(fromScene);
   }
 
   public createOverlayButton(): void {
@@ -64,8 +73,7 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
 
   public showButton(text?: string): void {
     if (text) {
-      this.buttonText.setText(text);
-      this.adjustTextToButton();
+      this.changeText(text);
     }
     this.button.setVisible(true);
     this.buttonText.setVisible(true);
@@ -73,7 +81,8 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
   }
 
   public changeText(newText: string): void {
-    this.buttonText.setText(newText);
+    const translate = this.scene.translation.t(newText);
+    this.buttonText.setText(translate);
     this.adjustTextToButton();
   }
 
@@ -100,5 +109,11 @@ export class ButtonBeige extends Phaser.GameObjects.Container {
       this.buttonText.setFontSize(fontSize);
       textBounds = this.buttonText.getBounds();
     }
+  }
+
+  private onLanguageChanged(): void {
+    this.scene.translation.i18next.on('languageChanged', () => {
+      this.adjustTextToButton();
+    });
   }
 }

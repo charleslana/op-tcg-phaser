@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { ButtonBeige } from '../shared/ButtonBeige';
+import { ButtonLanguage } from '../shared/ButtonLanguage';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
@@ -32,6 +33,7 @@ export class LoginScene extends Scene {
     this.createLoginButton();
     this.createRegisterButton();
     this.createErrorText();
+    new ButtonLanguage(this);
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -43,19 +45,22 @@ export class LoginScene extends Scene {
 
   private createLoginText(): void {
     const { width, height } = this.scale;
-    this.add
+    const textObject = this.add
       .text(width / 2, height / 5, 'Faça login para entrar', {
         fontFamily: 'AlineaSans',
         fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);
+    textObject.translation = this.translation.add(textObject, {
+      translationKey: 'login_text',
+    });
   }
 
   private createInputUsername(): void {
     const { width, height } = this.scale;
     this.inputUsername = new InputText(this);
-    this.inputUsername.placeholder = 'Digite o username';
+    this.inputUsername.placeholder = 'input_username';
     this.inputUsername.create();
     this.inputUsername.changePosition(width / 2, height / 3);
   }
@@ -63,7 +68,7 @@ export class LoginScene extends Scene {
   private createInputPassword(): void {
     const { width, height } = this.scale;
     this.inputPassword = new InputText(this);
-    this.inputPassword.placeholder = 'Digite a senha';
+    this.inputPassword.placeholder = 'input_username_password';
     this.inputPassword.create();
     this.inputPassword.toggleVisibility();
     this.inputPassword.changePosition(width / 2, height / 2.3);
@@ -76,6 +81,7 @@ export class LoginScene extends Scene {
       positionX: width / 2,
       positionY: height / 1.8,
       text: 'Entrar',
+      key: 'login_button',
       scaleX: 0.9,
       scaleY: 1.5,
     });
@@ -111,6 +117,9 @@ export class LoginScene extends Scene {
       })
       .setOrigin(0.5, 0.5)
       .setInteractive({ useHandCursor: true });
+    this.registerButton.translation = this.translation.add(this.registerButton, {
+      translationKey: 'login_register_text',
+    });
     this.registerButton.on('pointerdown', () => {
       this.scene.start(SceneEnum.Register);
     });

@@ -110,6 +110,7 @@ export class PasswordScene extends Scene {
       positionX: width / 2,
       positionY: 480 + this.offsetY,
       text: 'Alterar',
+      key: 'update_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });
@@ -129,6 +130,7 @@ export class PasswordScene extends Scene {
       positionX: 120,
       positionY: height / 1.1,
       text: 'Voltar',
+      key: 'back_button',
       scaleX: 0.7,
       scaleY: 1.5,
     });

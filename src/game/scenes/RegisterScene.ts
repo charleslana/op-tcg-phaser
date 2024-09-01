@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { ButtonBeige } from '../shared/ButtonBeige';
+import { ButtonLanguage } from '../shared/ButtonLanguage';
 import { EventBus } from '../EventBus';
 import { ImageEnum } from '../enums/image-enum';
 import { InputText } from '../shared/InputText';
@@ -31,6 +32,7 @@ export class RegisterScene extends Scene {
     this.createRegisterButton();
     this.createLoginButton();
     this.createErrorText();
+    new ButtonLanguage(this);
     new Version(this);
     EventBus.emit('current-scene-ready', this);
   }
@@ -85,6 +87,7 @@ export class RegisterScene extends Scene {
       positionX: width / 2,
       positionY: height / 1.5,
       text: 'Cadastrar',
+      key: 'register_button',
       scaleX: 1.3,
       scaleY: 1.5,
     });
