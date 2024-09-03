@@ -1,7 +1,7 @@
-import SimpleDropDownList from 'phaser3-rex-plugins/templates/ui/simpledropdownlist/SimpleDropDownList';
 import { ButtonBeige } from '@/game/shared/ButtonBeige';
 import { CardList } from './CardList';
 import { Deck } from './Deck';
+import { Dropdown } from '@/game/shared/Dropdown';
 import { EventBus } from '@/game/EventBus';
 import { Filter } from './Filter';
 import { FloatingCard } from './FloatingCard';
@@ -20,8 +20,8 @@ export class DeckScene extends Scene {
   }
 
   private inputName: InputText = <InputText>{};
-  private dropDownList: SimpleDropDownList = <SimpleDropDownList>{};
   private deckSelected: UserDeckInterface = <UserDeckInterface>{ id: 0 };
+  private dropdown: Dropdown = <Dropdown>{};
   private deck: Deck = <Deck>{};
   private filter: Filter = <Filter>{};
   private userStore = useUserStore();
@@ -38,7 +38,6 @@ export class DeckScene extends Scene {
 
   create() {
     this.createDecksDropdown();
-    this.createLoadDeckButton();
     this.createInputName();
     this.createSaveDeckButton();
     this.createInfo();
@@ -59,104 +58,31 @@ export class DeckScene extends Scene {
   }
 
   private createDecksDropdown(): void {
-    const style = this.getDropdownStyle();
     const options = this.userStore.user.decks.map(deck => ({
       text: deck.name,
       value: deck.id,
     }));
-    this.dropDownList = this.rexUI.add
-      .simpleDropDownList(style)
-      .resetDisplayContent('  Selecione um deck')
-      .setOptions(options)
-      .setPosition(200, 100)
-      .layout();
-    this.setupDropdownEvents();
-  }
-
-  private getDropdownStyle(): SimpleDropDownList.IConfig {
-    const COLOR_LIGHT = 0x7b5e57;
-    return {
-      label: {
-        space: { left: 0, right: 0, top: 20, bottom: 20 },
-        background: { color: 0xfffffff },
-        text: {
-          fontSize: 23,
-          fixedWidth: 300,
-          fontFamily: 'AlineaSans',
-          color: 0xf000000,
-        },
-        height: 20,
-      },
-      track: { width: 10, color: 0xfffffff },
-      thumb: { width: 14, height: 14, color: COLOR_LIGHT },
-      button: {
-        space: { left: 10, right: 10, top: 20, bottom: 20 },
-        background: {
-          color: 0xffffff,
-          strokeWidth: 0,
-          'hover.strokeColor': 0xf000000,
-          'hover.strokeWidth': 2,
-        },
-        text: {
-          fontSize: 23,
-          fixedWidth: 280,
-          fontFamily: 'AlineaSans',
-          color: 0xfffffff,
-        },
-      },
-      list: {
-        maxHeight: 400,
-        sliderAdaptThumbSize: true,
-        mouseWheelScroller: {
-          focus: true,
-          speed: 0.1,
-        },
-      },
-    };
-  }
-
-  private setupDropdownEvents(): void {
-    this.dropDownList.on(
-      'button.click',
-      (
-        dropDownList: SimpleDropDownList,
-        _listPanel: SimpleDropDownList,
-        button: SimpleDropDownList
-      ) => {
-        dropDownList.setText('  ' + button.text);
-        this.deckSelected.id = button.value;
-        this.deckSelected.name = button.text;
-      }
-    );
-  }
-
-  private createLoadDeckButton(): void {
-    const button = new ButtonBeige(this);
-    button.create({
-      positionX: 200 + 270,
-      positionY: 100,
-      text: 'Carregar',
-      key: 'load_button',
-      scaleX: 1,
-      scaleY: 1.5,
+    this.dropdown = new Dropdown(this, 200, 100, options, selectedValue => {
+      this.handleDropdownSelect(selectedValue);
     });
-    button.onPointerDown(() => {
-      this.changeDeckSelected();
-    });
+    this.dropdown.setText('  Selecione um deck');
   }
 
-  private changeDeckSelected(): void {
-    console.log(this.deckSelected);
-    if (this.deckSelected.id !== 0) {
-      this.deleteDeckButton.showButton('delete_deck_button');
-      this.inputName.text = this.deckSelected.name;
-      this.inputName.updateName(this.deckSelected.name);
-      const deck = this.userStore.getDeck(this.deckSelected.id);
+  private handleDropdownSelect(value: unknown): void {
+    const selectedDeck = this.userStore.user.decks.find(deck => deck.id === value);
+    if (selectedDeck) {
+      this.deckSelected = selectedDeck;
+      this.inputName.text = selectedDeck.name;
+      this.inputName.updateName(selectedDeck.name);
+      const deck = this.userStore.getDeck(selectedDeck.id);
       if (deck) {
         this.deck.updateCards(deck.cards);
         EventBus.emit('check-leader', deck.cards);
       }
       EventBus.emit('card-count-text', '51');
+      this.deleteDeckButton.showButton('delete_deck_button');
+    } else {
+      this.clearDeck();
     }
   }
 
@@ -270,7 +196,7 @@ export class DeckScene extends Scene {
   }
 
   private clearDeck(): void {
-    this.dropDownList.setText('  Selecione um deck');
+    this.dropdown.setText('  Selecione um deck');
     this.deckSelected = <UserDeckInterface>{ id: 0 };
     this.inputName.text = '';
     this.inputName.updateName(this.inputName.placeholder);
@@ -281,14 +207,13 @@ export class DeckScene extends Scene {
   }
 
   private createDeleteDeckButton(): void {
-    const { height } = this.scale;
     this.deleteDeckButton = new ButtonBeige(this);
     this.deleteDeckButton.create({
-      positionX: 200 + 100,
-      positionY: height / 1.25,
+      positionX: 200 + 270,
+      positionY: 100,
       text: 'Excluir deck',
       key: 'delete_deck_button',
-      scaleX: 1.4,
+      scaleX: 1,
       scaleY: 1.5,
     });
     this.resetDeleteDeckButton();
