@@ -24,5 +24,6 @@
   "update_password_button": "Alterar senha",
   "update_button": "Alterar",
   "lobby_button": "Lobby",
-  "private_lobby_button": "Privado"
+  "private_lobby_button": "Privado",
+  "version": "versão {{0}}"
 }

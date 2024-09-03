@@ -24,5 +24,6 @@
   "update_password_button": "Update password",
   "update_button": "Update",
   "lobby_button": "Lobby",
-  "private_lobby_button": "Private"
+  "private_lobby_button": "Private",
+  "version": "version {{0}}"
 }

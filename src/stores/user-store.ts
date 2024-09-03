@@ -23,7 +23,15 @@ export const useUserStore = defineStore('user', () => {
   function setData() {
     user.value = data;
   }
-  return { user, setUser, setData, getDeck };
+  function updateDeck(updatedDeck: UserDeckInterface) {
+    const index = user.value.decks.findIndex(deck => deck.id === updatedDeck.id);
+    if (index !== -1) {
+      user.value.decks[index] = updatedDeck;
+      return;
+    }
+    throw new Error(`Deck com ID ${updatedDeck.id} não encontrado.`);
+  }
+  return { user, setUser, setData, getDeck, updateDeck };
 });
 
 function createDeckWithLeader(leaderIndex: number, color: ColorEnum): CardInterface[] {

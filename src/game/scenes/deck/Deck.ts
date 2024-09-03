@@ -197,7 +197,6 @@ export class Deck extends Phaser.GameObjects.Container {
       if (this.cards.length > 0) {
         const existingColors = this.getAllColorsFromExistingCards();
         const isLeaderColorValid = this.doesLeaderHaveAllColors(existingColors, card.color);
-
         if (!isLeaderColorValid) {
           this.logError('O Líder deve ter exatamente as cores das cartas já adicionadas.');
           return;

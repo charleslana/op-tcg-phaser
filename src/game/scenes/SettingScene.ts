@@ -28,6 +28,7 @@ export class SettingScene extends Scene {
   }
 
   create() {
+    new ButtonLanguage(this);
     this.createPlayerName();
     this.createInputPlayerName();
     const checkboxes = this.createTextOptions();
@@ -36,7 +37,6 @@ export class SettingScene extends Scene {
     this.createSaveButton();
     this.createUpdatePasswordButton();
     new Version(this);
-    new ButtonLanguage(this);
     EventBus.emit('current-scene-ready', this);
   }
 

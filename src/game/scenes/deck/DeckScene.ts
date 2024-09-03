@@ -13,6 +13,7 @@ import { useCardStore } from '@/stores/card-store';
 import { UserDeckInterface } from '@/game/interfaces/user-deck-interface';
 import { useUserStore } from '@/stores/user-store';
 import { Version } from '@/game/shared/Version';
+import { deepClone } from '@/utils/utils';
 
 export class DeckScene extends Scene {
   constructor() {
@@ -76,7 +77,8 @@ export class DeckScene extends Scene {
       this.inputName.updateName(selectedDeck.name);
       const deck = this.userStore.getDeck(selectedDeck.id);
       if (deck) {
-        this.deck.updateCards(deck.cards);
+        const cloneDeck = deepClone(deck);
+        this.deck.updateCards(cloneDeck.cards);
         EventBus.emit('check-leader', deck.cards);
       }
       EventBus.emit('card-count-text', '51');
