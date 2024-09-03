@@ -45,19 +45,22 @@ export class RegisterScene extends Scene {
 
   private createRegisterText(): void {
     const { width, height } = this.scale;
-    this.add
+    const textObject = this.add
       .text(width / 2, height / 5, 'Faça o cadastro da sua conta', {
         fontFamily: 'AlineaSans',
         fontSize: '25px',
         color: '#000000',
       })
       .setOrigin(0.5, 0.5);
+    textObject.translation = this.translation.add(textObject, {
+      translationKey: 'register_text',
+    });
   }
 
   private createInputUsername(): void {
     const { width, height } = this.scale;
     this.inputUsername = new InputText(this);
-    this.inputUsername.placeholder = 'Digite o username';
+    this.inputUsername.placeholder = 'input_username';
     this.inputUsername.create();
     this.inputUsername.changePosition(width / 2, height / 3);
   }
@@ -65,7 +68,7 @@ export class RegisterScene extends Scene {
   private createInputPassword(): void {
     const { width, height } = this.scale;
     this.inputPassword = new InputText(this);
-    this.inputPassword.placeholder = 'Digite a senha';
+    this.inputPassword.placeholder = 'input_username_password';
     this.inputPassword.create();
     this.inputPassword.toggleVisibility();
     this.inputPassword.changePosition(width / 2, height / 2.3);
@@ -74,7 +77,7 @@ export class RegisterScene extends Scene {
   private createInputConfirmPassword(): void {
     const { width, height } = this.scale;
     this.inputConfirmPassword = new InputText(this);
-    this.inputConfirmPassword.placeholder = 'Confirme a senha';
+    this.inputConfirmPassword.placeholder = 'input_username_confirm_password';
     this.inputConfirmPassword.create();
     this.inputConfirmPassword.toggleVisibility();
     this.inputConfirmPassword.changePosition(width / 2, height / 1.87);
@@ -118,6 +121,9 @@ export class RegisterScene extends Scene {
       })
       .setOrigin(0.5, 0.5)
       .setInteractive({ useHandCursor: true });
+    this.loginButton.translation = this.translation.add(this.loginButton, {
+      translationKey: 'register_login_text',
+    });
     this.loginButton.on('pointerdown', () => {
       this.scene.start(SceneEnum.Login);
     });
