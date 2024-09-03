@@ -22,6 +22,7 @@ export class Filter extends Phaser.GameObjects.Container {
   private yellowFilter = false;
   private countText: Phaser.GameObjects.Text = <Phaser.GameObjects.Text>{};
   private emitEventName = 'filter-card-color';
+  private maxTextWidth = 183;
 
   public create(): void {
     this.createDeckFilter();
@@ -35,47 +36,49 @@ export class Filter extends Phaser.GameObjects.Container {
   }
 
   private createDeckFilter(): void {
-    const redFilter = this.createRedFilter();
-    const blueFilter = this.createBlueFilter(redFilter);
-    this.createBlackFilter(redFilter, blueFilter);
+    this.createRedFilter();
+    this.createBlueFilter();
+    this.createBlackFilter();
     this.createGreenFilter();
-    this.createPurpleFilter(redFilter);
-    const yellowFilter = this.createYellowFilter(redFilter, blueFilter);
-    const limitCard = this.createLimitCardFilter(redFilter, blueFilter, yellowFilter);
-    this.createSearchTermInput(redFilter, blueFilter, yellowFilter, limitCard);
-    this.createCardCountText(redFilter, blueFilter, yellowFilter, limitCard);
+    this.createPurpleFilter();
+    this.createYellowFilter();
+    this.createLimitCardFilter();
+    this.createSearchTermInput();
+    this.createCardCountText();
   }
 
-  private createRedFilter(): number {
+  private createRedFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
-    return createCheckbox.create({
+    createCheckbox.create({
       positionX: 650,
       positionY: 520,
-      text: 'Vermelho',
+      text: 'checkbox_red',
       onChange: (value: boolean) => (this.redFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Red,
     });
+    this.adjustFontSize(createCheckbox.text);
   }
 
-  private createBlueFilter(redFilter: number): number {
+  private createBlueFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
-    return createCheckbox.create({
-      positionX: 650 + redFilter,
+    createCheckbox.create({
+      positionX: 650 + this.maxTextWidth,
       positionY: 520,
-      text: 'Azul',
+      text: 'checkbox_blue',
       onChange: (value: boolean) => (this.blueFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Blue,
     });
+    this.adjustFontSize(createCheckbox.text);
   }
 
-  private createBlackFilter(redFilter: number, blueFilter: number): void {
+  private createBlackFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
     createCheckbox.create({
-      positionX: 650 + redFilter + blueFilter,
+      positionX: 650 + this.maxTextWidth * 2,
       positionY: 520,
-      text: 'Preto',
+      text: 'checkbox_black',
       onChange: (value: boolean) => (this.blackFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Black,
@@ -87,79 +90,74 @@ export class Filter extends Phaser.GameObjects.Container {
     createCheckbox.create({
       positionX: 650,
       positionY: 520 + 60,
-      text: 'Verde',
+      text: 'checkbox_green',
       onChange: (value: boolean) => (this.greenFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Green,
     });
   }
 
-  private createPurpleFilter(redFilter: number): void {
+  private createPurpleFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
     createCheckbox.create({
-      positionX: 650 + redFilter,
+      positionX: 650 + this.maxTextWidth,
       positionY: 520 + 60,
-      text: 'Roxo',
+      text: 'checkbox_purple',
       onChange: (value: boolean) => (this.purpleFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Purple,
     });
   }
 
-  private createYellowFilter(redFilter: number, blueFilter: number): number {
+  private createYellowFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
-    return createCheckbox.create({
-      positionX: 650 + redFilter + blueFilter,
+    createCheckbox.create({
+      positionX: 650 + this.maxTextWidth * 2,
       positionY: 520 + 60,
-      text: 'Amarelo',
+      text: 'checkbox_yellow',
       onChange: (value: boolean) => (this.yellowFilter = value),
       eventEmit: this.emitEventName,
       valueEmit: ColorEnum.Yellow,
     });
+    this.adjustFontSize(createCheckbox.text);
   }
 
-  private createLimitCardFilter(
-    redFilter: number,
-    blueFilter: number,
-    yellowFilter: number
-  ): number {
+  private createLimitCardFilter(): void {
     const createCheckbox = new Checkbox(this.scene);
-    return createCheckbox.create({
-      positionX: 650 + redFilter + blueFilter + yellowFilter,
+    createCheckbox.create({
+      positionX: 650 + this.maxTextWidth * 3,
       positionY: 520 + 30,
-      text: 'Limite de 4',
+      text: 'checkbox_limit',
       checked: true,
       readOnly: true,
     });
+    this.adjustFontSize(createCheckbox.text);
   }
 
-  private createSearchTermInput(
-    redFilter: number,
-    blueFilter: number,
-    yellowFilter: number,
-    limitCard: number
-  ): void {
+  private adjustFontSize(textObject: Phaser.GameObjects.Text): void {
+    let fontSize = 25;
+    const maxWidth = this.maxTextWidth - 50;
+    textObject.setFontSize(fontSize);
+    while (textObject.getBounds().width > maxWidth && fontSize > 10) {
+      fontSize -= 1;
+      textObject.setFontSize(fontSize);
+    }
+  }
+
+  private createSearchTermInput(): void {
     this.inputSearchTerm = new InputText(this.scene, 'filterTerm', true, 25);
-    this.inputSearchTerm.placeholder = 'Pesquisar';
+    this.inputSearchTerm.placeholder = 'input_search';
     this.inputSearchTerm.create();
-    this.inputSearchTerm.changePosition(
-      650 + redFilter + blueFilter + yellowFilter + limitCard + 100,
-      520 + 30
-    );
+    this.inputSearchTerm.changePosition(650 + this.maxTextWidth * 4 + 140, 520 + 30);
     this.inputSearchTerm.onNameChanged((newName: string) => {
       console.log('Name changed to:', newName);
       EventBus.emit('filter-name', newName);
     });
   }
 
-  private createCardCountText(
-    redFilter: number,
-    blueFilter: number,
-    yellowFilter: number,
-    limitCard: number
-  ): void {
+  private createCardCountText(): void {
     this.countText = this.scene.add
-      .text(650 + redFilter + blueFilter + yellowFilter + limitCard + 300, 520 + 30, '0 / 51', {
+      .text(650 + this.maxTextWidth * 4 + 310, 520 + 30, '0 / 51', {
         fontSize: '30px',
         color: '#000000',
         fontFamily: 'AlineaSans',
@@ -171,16 +169,17 @@ export class Filter extends Phaser.GameObjects.Container {
   private createCountTotalCard(): void {
     const { width, height } = this.scene.scale;
     const cardStore = useCardStore();
-    this.scene.add.text(
-      width / 2 + 200,
-      height / 2 + 60,
-      `Total cartas: ${cardStore.cards.length}`,
-      {
+    const textObject = this.scene.add
+      .text(width / 2 + 250, height / 2 + 60, `Total cartas: ${cardStore.cards.length}`, {
         fontSize: '25px',
         color: '#000000',
         fontFamily: 'AlineaSans',
-      }
-    );
+      })
+      .setOrigin(0.5, 0);
+    textObject.translation = this.scene.translation.add(textObject, {
+      translationKey: 'text_total_cards',
+      interpolation: [cardStore.cards.length],
+    });
   }
 
   private changeCountText(newText: string): void {

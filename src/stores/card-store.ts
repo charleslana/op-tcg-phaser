@@ -18,7 +18,7 @@ export const useCardStore = defineStore('cards', () => {
   function searchByTerm(searchTerm: string, colors: ColorEnum[] = []): CardInterface[] {
     const lowerCaseTerm = searchTerm.toLowerCase();
     const filteredByColor = colors.length > 0 ? filterByColors(colors) : cards.value;
-    if (lowerCaseTerm === 'lider') {
+    if (lowerCaseTerm === 'lider' || lowerCaseTerm === 'leader') {
       return filteredByColor.filter(card => card.characterType === CharacterTypeEnum.Leader);
     }
     const exactNameMatch = /^(\[.*\])$/.exec(searchTerm);

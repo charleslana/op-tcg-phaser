@@ -25,5 +25,14 @@
   "update_button": "Alterar",
   "lobby_button": "Lobby",
   "private_lobby_button": "Privado",
-  "version": "versão {{0}}"
+  "version": "versão {{0}}",
+  "input_search": "Pesquisar",
+  "checkbox_red": "Vermelho",
+  "checkbox_green": "Verde",
+  "checkbox_blue": "Azul",
+  "checkbox_purple": "Roxo",
+  "checkbox_black": "Preto",
+  "checkbox_yellow": "Amarelo",
+  "checkbox_limit": "Limite de 4",
+  "text_total_cards": "Total cartas: {{0}}"
 }

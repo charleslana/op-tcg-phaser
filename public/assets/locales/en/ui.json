@@ -25,5 +25,14 @@
   "update_button": "Update",
   "lobby_button": "Lobby",
   "private_lobby_button": "Private",
-  "version": "version {{0}}"
+  "version": "version {{0}}",
+  "input_search": "Search",
+  "checkbox_red": "Red",
+  "checkbox_green": "Green",
+  "checkbox_blue": "Blue",
+  "checkbox_purple": "Purple",
+  "checkbox_black": "Black",
+  "checkbox_yellow": "Yellow",
+  "checkbox_limit": "Limit of 4",
+  "text_total_cards": "Total cards: {{0}}"
 }
